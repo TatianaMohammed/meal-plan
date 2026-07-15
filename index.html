@@ -1,0 +1,596 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Weekly Meal Plan — Week of July 14, 2026</title>
+<script>
+  (() => {
+    const param = new URLSearchParams(window.location.search).get("scoutTheme");
+    const theme =
+      param || (window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light");
+    document.documentElement.setAttribute("data-theme", theme);
+  })();
+</script>
+<style>
+:root {
+  color-scheme: light;
+  --cp-bg: #f7f4ef;
+  --cp-bg-elevated: #fcfbf8;
+  --cp-surface: #ffffff;
+  --cp-surface-soft: #f5f5f5;
+  --cp-border: #dedede;
+  --cp-border-strong: #919191;
+  --cp-text: #242424;
+  --cp-text-muted: #5c5c5c;
+  --cp-text-soft: #6f6f6f;
+  --cp-accent: #b11f4b;
+  --cp-accent-hover: #9a1a41;
+  --cp-accent-soft: rgba(177, 31, 75, 0.08);
+  --cp-accent-fg: #ffffff;
+  --cp-success: #16a34a;
+  --cp-danger: #dc2626;
+  --cp-warning: #f59e0b;
+  --cp-link: #0078d4;
+  --cp-shadow: 0 18px 48px rgba(0, 0, 0, 0.12);
+  --cp-overlay: rgba(255, 255, 255, 0.8);
+  --cp-panel: rgba(255, 255, 255, 0.86);
+  --cp-panel-strong: rgba(255, 255, 255, 0.96);
+  --cp-sheen: rgba(255, 255, 255, 0.55);
+  --cp-highlight: rgba(177, 31, 75, 0.12);
+}
+html[data-theme="dark"] {
+  color-scheme: dark;
+  --cp-bg: #3d3b3a;
+  --cp-bg-elevated: #343231;
+  --cp-surface: #292929;
+  --cp-surface-soft: #2e2e2e;
+  --cp-border: #474747;
+  --cp-border-strong: #5f5f5f;
+  --cp-text: #dedede;
+  --cp-text-muted: #919191;
+  --cp-text-soft: #b0b0b0;
+  --cp-accent: #fd8ea1;
+  --cp-accent-hover: #fb7b91;
+  --cp-accent-soft: rgba(253, 142, 161, 0.14);
+  --cp-accent-fg: #1a1a1a;
+  --cp-success: #4ade80;
+  --cp-danger: #f87171;
+  --cp-warning: #fbbf24;
+  --cp-link: #4da6ff;
+  --cp-shadow: 0 18px 48px rgba(0, 0, 0, 0.32);
+  --cp-overlay: rgba(41, 41, 41, 0.88);
+  --cp-panel: rgba(41, 41, 41, 0.72);
+  --cp-panel-strong: rgba(41, 41, 41, 0.96);
+  --cp-sheen: rgba(255, 255, 255, 0.04);
+  --cp-highlight: rgba(253, 142, 161, 0.12);
+}
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body {
+  font-family: "Segoe UI", Aptos, Calibri, -apple-system, BlinkMacSystemFont, sans-serif;
+  background: var(--cp-bg);
+  color: var(--cp-text);
+  line-height: 1.5;
+  min-height: 100vh;
+}
+.container { max-width: 1400px; margin: 0 auto; padding: 24px; }
+header {
+  background: var(--cp-bg-elevated);
+  border-bottom: 1px solid var(--cp-border);
+  padding: 24px 0;
+  margin-bottom: 24px;
+}
+header .container { padding-top: 0; padding-bottom: 0; }
+h1 { font-size: 28px; font-weight: 600; margin-bottom: 4px; }
+.subtitle { color: var(--cp-text-muted); font-size: 14px; }
+.tabs {
+  display: flex;
+  gap: 4px;
+  border-bottom: 1px solid var(--cp-border);
+  margin-bottom: 24px;
+  overflow-x: auto;
+}
+.tab {
+  padding: 12px 20px;
+  cursor: pointer;
+  border: none;
+  background: none;
+  color: var(--cp-text-muted);
+  font-family: inherit;
+  font-size: 14px;
+  font-weight: 500;
+  border-bottom: 2px solid transparent;
+  white-space: nowrap;
+  transition: all 0.15s;
+}
+.tab:hover { color: var(--cp-text); }
+.tab.active {
+  color: var(--cp-accent);
+  border-bottom-color: var(--cp-accent);
+}
+.panel { display: none; }
+.panel.active { display: block; }
+
+/* Macro summary cards */
+.macro-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+  gap: 12px;
+  margin-bottom: 24px;
+}
+.macro-card {
+  background: var(--cp-surface);
+  border: 1px solid var(--cp-border);
+  border-radius: 16px;
+  padding: 16px;
+  box-shadow: 0 0 2px rgba(0,0,0,0.12), 0 1px 2px rgba(0,0,0,0.14);
+}
+.macro-label { font-size: 12px; color: var(--cp-text-muted); text-transform: uppercase; letter-spacing: 0.5px; }
+.macro-value { font-size: 24px; font-weight: 600; margin-top: 4px; }
+.macro-target { font-size: 12px; color: var(--cp-text-soft); margin-top: 2px; }
+
+/* Calendar grid */
+.calendar {
+  display: grid;
+  grid-template-columns: repeat(7, minmax(180px, 1fr));
+  gap: 12px;
+  overflow-x: auto;
+}
+.day-column {
+  background: var(--cp-surface);
+  border: 1px solid var(--cp-border);
+  border-radius: 16px;
+  padding: 12px;
+  box-shadow: 0 0 2px rgba(0,0,0,0.12), 0 1px 2px rgba(0,0,0,0.14);
+  min-width: 180px;
+}
+.day-header {
+  padding-bottom: 8px;
+  border-bottom: 1px solid var(--cp-border);
+  margin-bottom: 8px;
+}
+.day-name { font-weight: 600; font-size: 14px; }
+.day-date { font-size: 12px; color: var(--cp-text-muted); }
+.day-totals {
+  font-size: 11px;
+  color: var(--cp-accent);
+  margin-top: 4px;
+  font-weight: 500;
+}
+.meal-card {
+  background: var(--cp-surface-soft);
+  border-radius: 10px;
+  padding: 8px 10px;
+  margin-bottom: 6px;
+  border-left: 3px solid var(--cp-accent);
+  cursor: pointer;
+  transition: background 0.15s;
+}
+.meal-card:hover { background: var(--cp-accent-soft); }
+.meal-type {
+  font-size: 10px;
+  text-transform: uppercase;
+  color: var(--cp-text-muted);
+  letter-spacing: 0.5px;
+}
+.meal-name { font-size: 13px; font-weight: 500; margin: 2px 0; }
+.meal-macros { font-size: 11px; color: var(--cp-text-soft); }
+.meal-macros .prot { color: var(--cp-accent); font-weight: 500; }
+
+/* Recipe cards */
+.recipe-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(340px, 1fr));
+  gap: 16px;
+}
+.recipe-card {
+  background: var(--cp-surface);
+  border: 1px solid var(--cp-border);
+  border-radius: 16px;
+  padding: 20px;
+  box-shadow: 0 0 2px rgba(0,0,0,0.12), 0 1px 2px rgba(0,0,0,0.14);
+}
+.recipe-title { font-size: 18px; font-weight: 600; margin-bottom: 4px; }
+.recipe-meta { font-size: 12px; color: var(--cp-text-muted); margin-bottom: 12px; }
+.recipe-section-title {
+  font-size: 12px;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  color: var(--cp-accent);
+  font-weight: 600;
+  margin: 12px 0 6px;
+}
+.recipe-list { list-style: none; }
+.recipe-list li {
+  padding: 4px 0;
+  font-size: 13px;
+  border-bottom: 1px solid var(--cp-border);
+}
+.recipe-list li:last-child { border-bottom: none; }
+.recipe-instructions li { padding: 6px 0 6px 20px; position: relative; counter-increment: step; }
+.recipe-instructions { counter-reset: step; }
+.recipe-instructions li::before {
+  content: counter(step) ".";
+  position: absolute;
+  left: 0;
+  color: var(--cp-accent);
+  font-weight: 600;
+}
+.macro-pill {
+  display: inline-block;
+  background: var(--cp-accent-soft);
+  color: var(--cp-accent);
+  padding: 2px 8px;
+  border-radius: 10px;
+  font-size: 11px;
+  font-weight: 500;
+  margin-right: 4px;
+}
+.note {
+  background: var(--cp-highlight);
+  border-left: 3px solid var(--cp-warning);
+  padding: 8px 12px;
+  border-radius: 6px;
+  font-size: 13px;
+  margin-top: 8px;
+}
+
+/* Grocery list */
+.grocery-section {
+  background: var(--cp-surface);
+  border: 1px solid var(--cp-border);
+  border-radius: 16px;
+  padding: 20px;
+  margin-bottom: 12px;
+  box-shadow: 0 0 2px rgba(0,0,0,0.12), 0 1px 2px rgba(0,0,0,0.14);
+}
+.grocery-header { font-size: 16px; font-weight: 600; margin-bottom: 12px; color: var(--cp-accent); }
+.grocery-items { list-style: none; display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 4px; }
+.grocery-items li { padding: 6px 0; font-size: 14px; display: flex; align-items: center; gap: 8px; }
+.grocery-items input[type="checkbox"] { accent-color: var(--cp-accent); cursor: pointer; }
+.grocery-items input[type="checkbox"]:checked + span { text-decoration: line-through; color: var(--cp-text-soft); }
+
+/* Prep timeline */
+.prep-step {
+  background: var(--cp-surface);
+  border: 1px solid var(--cp-border);
+  border-left: 4px solid var(--cp-accent);
+  border-radius: 10px;
+  padding: 16px;
+  margin-bottom: 12px;
+}
+.prep-time { font-weight: 600; color: var(--cp-accent); font-size: 14px; margin-bottom: 4px; }
+.prep-title { font-weight: 600; margin-bottom: 8px; }
+.prep-list { list-style: none; padding-left: 0; }
+.prep-list li { padding: 4px 0; font-size: 14px; }
+.prep-list li::before { content: "☐ "; color: var(--cp-accent); margin-right: 4px; }
+
+/* Guardrails callout */
+.callout {
+  background: var(--cp-surface);
+  border: 1px solid var(--cp-border);
+  border-radius: 16px;
+  padding: 20px;
+  margin-bottom: 24px;
+  box-shadow: 0 0 2px rgba(0,0,0,0.12), 0 1px 2px rgba(0,0,0,0.14);
+}
+.callout h3 { margin-bottom: 12px; color: var(--cp-accent); }
+.callout ul { padding-left: 20px; }
+.callout li { padding: 4px 0; font-size: 14px; }
+.print-btn {
+  background: var(--cp-accent);
+  color: var(--cp-accent-fg);
+  border: none;
+  padding: 8px 16px;
+  border-radius: 10px;
+  cursor: pointer;
+  font-family: inherit;
+  font-size: 14px;
+  font-weight: 500;
+}
+.print-btn:hover { background: var(--cp-accent-hover); }
+@media print {
+  .tabs, .print-btn { display: none; }
+  .panel { display: block !important; page-break-after: always; }
+}
+</style>
+</head>
+<body>
+<header>
+  <div class="container">
+    <h1>Weekly Meal Plan</h1>
+    <div class="subtitle">Week of July 14, 2026 · High-protein · Anti-inflammatory · TTC-safe · Wegovy-friendly</div>
+  </div>
+</header>
+
+<div class="container">
+  <div class="tabs">
+    <button class="tab active" onclick="showPanel('calendar', this)">📅 Calendar</button>
+    <button class="tab" onclick="showPanel('recipes', this)">🍳 Recipes</button>
+    <button class="tab" onclick="showPanel('grocery', this)">🛒 Grocery</button>
+    <button class="tab" onclick="showPanel('prep', this)">⏱️ Sunday Prep</button>
+    <button class="tab" onclick="showPanel('guide', this)">💡 Guide</button>
+  </div>
+
+  <!-- CALENDAR PANEL -->
+  <div id="calendar" class="panel active">
+    <div class="macro-grid">
+      <div class="macro-card"><div class="macro-label">Daily Calories</div><div class="macro-value">~1,450</div><div class="macro-target">Target for weight loss</div></div>
+      <div class="macro-card"><div class="macro-label">Protein</div><div class="macro-value">~115g</div><div class="macro-target">Preserves lean mass</div></div>
+      <div class="macro-card"><div class="macro-label">Carbs</div><div class="macro-value">~145g</div><div class="macro-target">40% of calories</div></div>
+      <div class="macro-card"><div class="macro-label">Fat</div><div class="macro-value">~48g</div><div class="macro-target">Healthy fats</div></div>
+      <div class="macro-card"><div class="macro-label">Fiber</div><div class="macro-value">≥30g</div><div class="macro-target">Gut + anti-inflammation</div></div>
+    </div>
+    <div class="calendar" id="calendarGrid"></div>
+  </div>
+
+  <!-- RECIPES PANEL -->
+  <div id="recipes" class="panel">
+    <div class="recipe-grid" id="recipeGrid"></div>
+  </div>
+
+  <!-- GROCERY PANEL -->
+  <div id="grocery" class="panel">
+    <div style="margin-bottom: 16px;">
+      <button class="print-btn" onclick="window.print()">🖨️ Print grocery list</button>
+    </div>
+    <div id="groceryGrid"></div>
+  </div>
+
+  <!-- PREP PANEL -->
+  <div id="prep" class="panel">
+    <div class="callout">
+      <h3>Sunday 90-Minute Meal Prep</h3>
+      <p>Do this Sunday afternoon and 80% of your week is already assembled. Work in parallel — oven + stove + counter all going at once.</p>
+    </div>
+    <div id="prepSteps"></div>
+  </div>
+
+  <!-- GUIDE PANEL -->
+  <div id="guide" class="panel">
+    <div class="callout">
+      <h3>Your Nutrition Profile</h3>
+      <ul>
+        <li><strong>Goal:</strong> Weight loss on Wegovy while trying to conceive (TTC)</li>
+        <li><strong>Priority:</strong> High protein (~115g/day) to preserve lean mass</li>
+        <li><strong>Allergies:</strong> Shrimp, crab (no shellfish anywhere in this plan)</li>
+      </ul>
+    </div>
+    <div class="callout">
+      <h3>TTC Pregnancy-Safe Guardrails</h3>
+      <ul>
+        <li>✅ Wild salmon, cod (low-mercury, high DHA for baby's brain)</li>
+        <li>✅ Eggs daily for choline</li>
+        <li>✅ Lentils, beans, dark leafy greens for folate & iron</li>
+        <li>✅ Full-fat dairy — linked to better fertility outcomes</li>
+        <li>❌ No swordfish, king mackerel, tilefish, marlin, bigeye tuna (high mercury)</li>
+        <li>❌ No raw fish, raw eggs, unpasteurized dairy</li>
+        <li>⚠️ Deli turkey (Thursday wrap): <strong>heat until steaming</strong> to kill listeria</li>
+        <li>⚠️ Keep caffeine under 200 mg/day (~1 medium coffee)</li>
+      </ul>
+    </div>
+    <div class="callout">
+      <h3>Wegovy Pro Tips</h3>
+      <ul>
+        <li><strong>Portion small</strong> — with reduced appetite, half a serving may fill you. Store the rest.</li>
+        <li><strong>Sip liquids AWAY from meals</strong> — 30 min before/after reduces nausea.</li>
+        <li><strong>Protein first, always</strong> — eat the protein portion first before carbs/fats.</li>
+        <li><strong>Cold foods = easier on rough days</strong> — chia pudding, salmon salad, overnight oats.</li>
+        <li><strong>Ginger tea in the pantry</strong> — anti-inflammatory AND settles Wegovy nausea.</li>
+      </ul>
+    </div>
+    <div class="callout">
+      <h3>Anti-Inflammatory Backbone</h3>
+      <ul>
+        <li>Mediterranean-style: olive oil, fatty fish 2–3x/week, berries daily</li>
+        <li>Leafy greens daily · Turmeric + ginger in spice rotation</li>
+        <li>Nuts/seeds for omega-3s · Minimal refined sugar & ultra-processed foods</li>
+      </ul>
+    </div>
+  </div>
+</div>
+
+<script>
+// ============ DATA ============
+const meals = [
+  {date:"2026-07-14", day:"Tuesday", type:"Breakfast", name:"Berry Almond Overnight Oats", cal:340, p:22, c:42, f:10, fib:8, recipe:"overnight-oats"},
+  {date:"2026-07-14", day:"Tuesday", type:"Snack 1", name:"Greek Yogurt + Blueberries + Chia", cal:180, p:17, c:18, f:4, fib:5, recipe:"greek-yogurt-bowl"},
+  {date:"2026-07-14", day:"Tuesday", type:"Lunch", name:"Mediterranean Chicken Quinoa Bowl", cal:455, p:38, c:42, f:15, fib:8, recipe:"med-chicken-bowl"},
+  {date:"2026-07-14", day:"Tuesday", type:"Snack 2", name:"Apple + Almond Butter", cal:180, p:5, c:22, f:10, fib:5, recipe:"simple-snack"},
+  {date:"2026-07-14", day:"Tuesday", type:"Dinner", name:"Sheet Pan Salmon + Asparagus + Sweet Potato", cal:470, p:36, c:32, f:20, fib:7, recipe:"sheet-pan-salmon"},
+  {date:"2026-07-15", day:"Wednesday", type:"Breakfast", name:"Spinach Feta Egg Scramble + Toast", cal:330, p:25, c:22, f:15, fib:4, recipe:"egg-scramble"},
+  {date:"2026-07-15", day:"Wednesday", type:"Snack 1", name:"Cottage Cheese + Pineapple", cal:170, p:18, c:15, f:3, fib:1, recipe:"cottage-cheese-pineapple"},
+  {date:"2026-07-15", day:"Wednesday", type:"Lunch", name:"Salmon Quinoa Bowl w/ Tahini", cal:460, p:35, c:38, f:18, fib:7, recipe:"salmon-quinoa-bowl"},
+  {date:"2026-07-15", day:"Wednesday", type:"Snack 2", name:"2 Hard-Boiled Eggs", cal:160, p:13, c:1, f:11, fib:0, recipe:"simple-snack"},
+  {date:"2026-07-15", day:"Wednesday", type:"Dinner", name:"Turkey Meatballs + Zoodles + Marinara", cal:435, p:38, c:22, f:20, fib:6, recipe:"turkey-meatballs"},
+  {date:"2026-07-16", day:"Thursday", type:"Breakfast", name:"Berry Almond Overnight Oats", cal:340, p:22, c:42, f:10, fib:8, recipe:"overnight-oats"},
+  {date:"2026-07-16", day:"Thursday", type:"Snack 1", name:"Hummus + Cucumber + Bell Pepper", cal:170, p:7, c:18, f:8, fib:5, recipe:"simple-snack"},
+  {date:"2026-07-16", day:"Thursday", type:"Lunch", name:"Turkey Hummus Wrap", cal:420, p:32, c:38, f:14, fib:8, recipe:"turkey-wrap"},
+  {date:"2026-07-16", day:"Thursday", type:"Snack 2", name:"String Cheese + 15 Almonds", cal:180, p:9, c:4, f:14, fib:3, recipe:"simple-snack"},
+  {date:"2026-07-16", day:"Thursday", type:"Dinner", name:"Baked Cod + Broccoli + Quinoa", cal:410, p:38, c:32, f:12, fib:6, recipe:"baked-cod"},
+  {date:"2026-07-17", day:"Friday", type:"Breakfast", name:"Chia Pudding + Berries + Walnuts", cal:320, p:15, c:32, f:16, fib:10, recipe:"chia-pudding"},
+  {date:"2026-07-17", day:"Friday", type:"Snack 1", name:"Greek Yogurt + Blueberries + Chia", cal:180, p:17, c:18, f:4, fib:5, recipe:"greek-yogurt-bowl"},
+  {date:"2026-07-17", day:"Friday", type:"Lunch", name:"Lentil Soup + Chicken Sausage + Greens", cal:435, p:32, c:42, f:12, fib:12, recipe:"lentil-soup"},
+  {date:"2026-07-17", day:"Friday", type:"Snack 2", name:"Edamame w/ Sea Salt", cal:190, p:18, c:15, f:8, fib:8, recipe:"simple-snack"},
+  {date:"2026-07-17", day:"Friday", type:"Dinner", name:"Chicken Veggie Stir-Fry + Brown Rice", cal:455, p:40, c:42, f:12, fib:7, recipe:"chicken-stir-fry"},
+  {date:"2026-07-18", day:"Saturday", type:"Breakfast", name:"Spinach Feta Egg Scramble + Toast", cal:330, p:25, c:22, f:15, fib:4, recipe:"egg-scramble"},
+  {date:"2026-07-18", day:"Saturday", type:"Snack 1", name:"Cottage Cheese + Pineapple", cal:170, p:18, c:15, f:3, fib:1, recipe:"cottage-cheese-pineapple"},
+  {date:"2026-07-18", day:"Saturday", type:"Lunch", name:"Salmon Salad on Mixed Greens", cal:415, p:32, c:18, f:22, fib:6, recipe:"salmon-salad"},
+  {date:"2026-07-18", day:"Saturday", type:"Snack 2", name:"Apple + Almond Butter", cal:180, p:5, c:22, f:10, fib:5, recipe:"simple-snack"},
+  {date:"2026-07-18", day:"Saturday", type:"Dinner", name:"Turkey Chili + Avocado", cal:465, p:38, c:42, f:15, fib:14, recipe:"turkey-chili"},
+  {date:"2026-07-19", day:"Sunday", type:"Breakfast", name:"Cottage Cheese Berry Bowl", cal:335, p:28, c:28, f:12, fib:6, recipe:"cottage-cheese-bowl"},
+  {date:"2026-07-19", day:"Sunday", type:"Snack 1", name:"Hummus + Cucumber + Bell Pepper", cal:170, p:7, c:18, f:8, fib:5, recipe:"simple-snack"},
+  {date:"2026-07-19", day:"Sunday", type:"Lunch", name:"Turkey Chili (leftover)", cal:465, p:38, c:42, f:15, fib:14, recipe:"turkey-chili"},
+  {date:"2026-07-19", day:"Sunday", type:"Snack 2", name:"2 Hard-Boiled Eggs", cal:160, p:13, c:1, f:11, fib:0, recipe:"simple-snack"},
+  {date:"2026-07-19", day:"Sunday", type:"Dinner", name:"Herb Roasted Chicken Thighs + Brussels + Sweet Potato", cal:485, p:42, c:35, f:18, fib:8, recipe:"roasted-chicken-thighs"},
+  {date:"2026-07-20", day:"Monday", type:"Breakfast", name:"Berry Almond Overnight Oats", cal:340, p:22, c:42, f:10, fib:8, recipe:"overnight-oats"},
+  {date:"2026-07-20", day:"Monday", type:"Snack 1", name:"Greek Yogurt + Blueberries + Chia", cal:180, p:17, c:18, f:4, fib:5, recipe:"greek-yogurt-bowl"},
+  {date:"2026-07-20", day:"Monday", type:"Lunch", name:"Mediterranean Chicken Quinoa Bowl", cal:455, p:38, c:42, f:15, fib:8, recipe:"med-chicken-bowl"},
+  {date:"2026-07-20", day:"Monday", type:"Snack 2", name:"String Cheese + 15 Almonds", cal:180, p:9, c:4, f:14, fib:3, recipe:"simple-snack"},
+  {date:"2026-07-20", day:"Monday", type:"Dinner", name:"Sheet Pan Salmon + Asparagus + Sweet Potato", cal:470, p:36, c:32, f:20, fib:7, recipe:"sheet-pan-salmon"}
+];
+
+const recipes = [
+  {id:"overnight-oats", name:"Berry Almond Overnight Oats", time:"5 min night before · 1 serving", macros:{cal:340, p:22, c:42, f:10, fib:8},
+    ingredients:["½ cup old-fashioned rolled oats","¾ cup unsweetened almond milk","½ cup plain 2% Greek yogurt","1 tbsp chia seeds","1 tbsp ground flaxseed","½ cup mixed berries","1 tbsp chopped walnuts","½ tsp cinnamon, splash of vanilla"],
+    instructions:["Combine everything except walnuts in a 16 oz mason jar.","Stir well, cap, refrigerate overnight (or up to 4 days).","Morning: top with walnuts. Eat cold or warm 60 sec."]},
+  {id:"egg-scramble", name:"Spinach Feta Egg Scramble + Toast", time:"8 min · 1 serving", macros:{cal:330, p:25, c:22, f:15, fib:4},
+    ingredients:["2 whole eggs + 1 egg white","1 cup baby spinach","1 tbsp crumbled feta","1 tsp olive oil","1 slice sprouted whole-grain toast","Salt, pepper, pinch of turmeric"],
+    instructions:["Heat olive oil in nonstick pan over medium. Add spinach, wilt 30 sec.","Whisk eggs + white with turmeric, salt, pepper. Pour over spinach.","Scramble gently, sprinkle feta in last 30 sec.","Serve with toast."]},
+  {id:"chia-pudding", name:"Chia Pudding + Berries + Walnuts", time:"3 min night before · 1 serving", macros:{cal:320, p:15, c:32, f:16, fib:10},
+    ingredients:["3 tbsp chia seeds","1 cup unsweetened almond milk","1 tsp vanilla, ½ tsp cinnamon, 1 tsp maple syrup","½ cup mixed berries","1 tbsp chopped walnuts"],
+    instructions:["Whisk chia, milk, vanilla, cinnamon, maple in a jar. Whisk again after 5 min to prevent clumps.","Refrigerate overnight. Top with berries + walnuts in AM."]},
+  {id:"cottage-cheese-bowl", name:"Cottage Cheese Berry Bowl", time:"3 min · 1 serving", macros:{cal:335, p:28, c:28, f:12, fib:6},
+    ingredients:["¾ cup full-fat cottage cheese","½ cup mixed berries","1 tbsp hemp seeds","1 tbsp chopped walnuts","Drizzle honey, pinch cinnamon"],
+    instructions:["Layer all in a bowl. Eat immediately."]},
+  {id:"med-chicken-bowl", name:"Mediterranean Chicken Quinoa Bowl", time:"5 min assembly · 1 serving", macros:{cal:455, p:38, c:42, f:15, fib:8},
+    ingredients:["¾ cup cooked quinoa (Sunday prep)","4 oz roasted chicken breast, sliced (Sunday prep)","½ cup chickpeas, rinsed","½ cucumber, diced","½ cup cherry tomatoes, halved","2 tbsp crumbled feta","1 tbsp chopped parsley","Dressing: 1 tbsp olive oil + 1 tsp lemon + oregano + salt"],
+    instructions:["Layer in mason jar: quinoa base, chicken, chickpeas, veg, feta on top.","Pack dressing separately.","Eat cold or warm 60 sec (leave feta off until after heating)."]},
+  {id:"salmon-quinoa-bowl", name:"Salmon Quinoa Bowl w/ Tahini", time:"5 min · 1 serving", macros:{cal:460, p:35, c:38, f:18, fib:7},
+    ingredients:["¾ cup cooked quinoa","4 oz leftover baked salmon, flaked","1 cup baby spinach","½ cup roasted sweet potato + asparagus","Tahini drizzle: 1 tbsp tahini + 1 tsp lemon + 1 tbsp warm water + garlic powder"],
+    instructions:["Layer quinoa, spinach, veg, salmon in bowl.","Whisk tahini drizzle and pour over."]},
+  {id:"turkey-wrap", name:"Turkey Hummus Wrap", time:"5 min · 1 serving", macros:{cal:420, p:32, c:38, f:14, fib:8}, note:"⚠️ TTC: Warm turkey in dry pan until steaming (kills listeria risk), then cool before assembling.",
+    ingredients:["1 whole-grain tortilla (Mission Carb Balance)","3 tbsp hummus","3 oz deli turkey (heated per note)","½ cup baby spinach","¼ cup roasted red peppers (jarred)","1 tbsp crumbled feta"],
+    instructions:["Spread hummus on tortilla. Layer turkey, spinach, peppers, feta.","Roll tightly, slice in half. Wrap in parchment."]},
+  {id:"lentil-soup", name:"Lentil Soup w/ Chicken Sausage & Greens", time:"30 min · 4 servings (batch)", macros:{cal:435, p:32, c:42, f:12, fib:12},
+    ingredients:["1 tbsp olive oil","1 yellow onion, diced","3 garlic cloves, minced","2 links chicken sausage, sliced","1 cup dry green/brown lentils","1 can (28 oz) diced tomatoes","4 cups low-sodium chicken broth","1 tsp cumin, ½ tsp turmeric, ½ tsp smoked paprika","2 cups chopped kale","Salt, pepper, lemon"],
+    instructions:["Heat oil in Dutch oven. Sauté onion 4 min; add garlic + sausage, cook 3 min.","Add lentils, tomatoes, broth, spices. Boil, reduce, simmer 25 min.","Stir in kale, cook 3 min. Season, finish with lemon.","Portion into 4 containers. Fridge 5 days; freeze 3 months."]},
+  {id:"salmon-salad", name:"Salmon Salad on Mixed Greens", time:"8 min · 1 serving", macros:{cal:415, p:32, c:18, f:22, fib:6},
+    ingredients:["1 can (5 oz) wild salmon, drained","1 tbsp Greek yogurt","1 tsp Dijon, 1 tsp lemon","1 tbsp red onion, 1 tbsp dill","2 cups mixed greens","¼ avocado, sliced","½ cup cherry tomatoes"],
+    instructions:["Mix salmon, yogurt, Dijon, lemon, onion, dill.","Serve over greens with avocado + tomatoes."]},
+  {id:"sheet-pan-salmon", name:"Sheet Pan Salmon + Asparagus + Sweet Potato", time:"25 min · 2 servings", macros:{cal:470, p:36, c:32, f:20, fib:7},
+    ingredients:["2 salmon fillets (5 oz each), skin on","1 bunch asparagus, trimmed","1 medium sweet potato, diced ½\"","2 tbsp olive oil","1 tsp smoked paprika, ½ tsp turmeric, salt, pepper","1 lemon, sliced"],
+    instructions:["Preheat 425°F. Toss sweet potato with oil + salt on sheet pan. Roast 12 min.","Add asparagus and salmon (rubbed with oil + spices, topped with lemon).","Roast 12 more minutes until salmon flakes."]},
+  {id:"turkey-meatballs", name:"Turkey Meatballs + Zoodles + Marinara", time:"30 min · 4 servings", macros:{cal:435, p:38, c:22, f:20, fib:6},
+    ingredients:["1 lb ground turkey 93/7","1 egg","⅓ cup grated Parmesan","2 tbsp almond flour","2 garlic cloves, minced","2 tbsp parsley","1 tsp Italian seasoning","3 zucchini, spiralized","1 jar Rao's marinara"],
+    instructions:["Preheat 400°F. Mix all meatball ingredients. Form 12 balls.","Bake on parchment-lined sheet 18–20 min until 165°F internal.","Sauté zoodles in dry pan 3 min. Warm marinara.","Serve 3 meatballs over zoodles with ½ cup sauce. Freeze extras."]},
+  {id:"baked-cod", name:"Baked Cod + Roasted Broccoli + Quinoa", time:"25 min · 1 serving", macros:{cal:410, p:38, c:32, f:12, fib:6},
+    ingredients:["5 oz cod fillet","1 tbsp olive oil, ½ lemon, garlic, dill","2 cups broccoli florets","¾ cup cooked quinoa"],
+    instructions:["Preheat 400°F. Toss broccoli with oil, salt, pepper. Roast 10 min.","Push aside; add cod (oil, lemon, dill). Bake 12 min until flakes.","Serve over warmed quinoa."]},
+  {id:"chicken-stir-fry", name:"Chicken Veggie Stir-Fry + Brown Rice", time:"15 min · 1 serving", macros:{cal:455, p:40, c:42, f:12, fib:7},
+    ingredients:["5 oz chicken breast, sliced thin","2 cups frozen stir-fry vegetables","1 tbsp avocado oil","1 tbsp low-sodium soy sauce","1 tsp ginger, 1 garlic clove, 1 tsp sesame oil","½ cup cooked brown rice"],
+    instructions:["Heat avocado oil in wok over high. Stir-fry chicken 4 min.","Add ginger + garlic 30 sec, then frozen veg. Stir-fry 4 min.","Add soy sauce + sesame oil. Serve over rice."]},
+  {id:"turkey-chili", name:"Turkey Chili", time:"40 min · 6 servings (freezer-friendly)", macros:{cal:465, p:38, c:42, f:15, fib:14},
+    ingredients:["1 tbsp olive oil","1 onion + 1 bell pepper, diced","3 garlic cloves","1 lb ground turkey 93/7","2 tbsp chili powder, 1 tbsp cumin, 1 tsp smoked paprika, ½ tsp cinnamon","1 tbsp tomato paste","1 can (28 oz) diced tomatoes","1 can each: black beans, kidney beans","1 cup chicken broth","Toppings: avocado, Greek yogurt, cilantro"],
+    instructions:["Heat oil. Sauté onion + pepper 5 min. Add garlic 30 sec.","Add turkey, brown 5 min. Add spices + tomato paste, stir 1 min.","Add tomatoes, beans, broth. Simmer 25 min uncovered.","Portion into 6 containers. Fridge 4 days; freeze 3 months."]},
+  {id:"roasted-chicken-thighs", name:"Herb Roasted Chicken Thighs + Brussels + Sweet Potato", time:"45 min · 4 servings", macros:{cal:485, p:42, c:35, f:18, fib:8},
+    ingredients:["4 bone-in skin-on chicken thighs","1.5 lbs Brussels sprouts, halved","2 sweet potatoes, diced","3 tbsp olive oil","1 tsp za'atar, garlic powder, salt, pepper","1 lemon"],
+    instructions:["Preheat 425°F. Toss veg with 2 tbsp oil, salt, pepper on 2 sheet pans.","Rub chicken with 1 tbsp oil + spices. Place on pan with veg.","Roast 35–40 min until chicken hits 175°F and skin is crispy.","Squeeze lemon over everything."]}
+];
+
+const grocery = {
+  "🥩 Proteins":["Wild salmon fillets — 2 lbs","Canned wild salmon — 1 can (6 oz)","Cod fillets — 1 lb","Boneless skinless chicken breasts — 2 lbs","Bone-in skin-on chicken thighs — 2 lbs","Ground turkey 93/7 — 2 lbs","Chicken sausage (no nitrates) — 1 pack","Deli turkey (uncured, low-sodium) — ½ lb","Large eggs — 18 count"],
+  "🧀 Dairy":["Plain 2% Greek yogurt — 32 oz tub","Full-fat cottage cheese — 24 oz","Feta cheese block — 6 oz","String cheese — 1 pack","Unsweetened almond milk — ½ gallon","Butter or ghee — 1 stick"],
+  "🥬 Produce":["Baby spinach — 10 oz","Mixed greens — 1 clamshell","Kale or Swiss chard — 1 bunch","Asparagus — 2 bunches","Broccoli — 2 heads","Brussels sprouts — 1.5 lbs","Sweet potatoes — 4 medium","Zucchini — 3","Bell peppers — 4","English cucumbers — 2","Cherry tomatoes — 2 pints","Red onion — 1","Yellow onions — 2","Garlic — 1 head","Fresh ginger — 1 knob","Lemons — 4","Limes — 2","Parsley — 1 bunch","Dill — 1 small bunch","Avocados — 4","Blueberries — 2 pints","Strawberries — 1 lb","Raspberries — 1 pint","Apples — 4","Pineapple — 1","Frozen stir-fry veg — 1 large bag"],
+  "🌾 Grains & Legumes":["Quinoa — 1 lb","Old-fashioned rolled oats — 1 canister","Brown rice or microwave pouches","Sprouted whole-grain bread (Ezekiel) — 1 loaf","Whole-grain tortillas (Mission Carb Balance)","Dry green/brown lentils — 1 lb","Chickpeas — 2 cans","Black beans — 2 cans","Kidney beans — 2 cans","Diced tomatoes, no salt — 2 cans (28 oz)","Tomato paste — 1 small can","Low-sodium chicken broth — 32 oz"],
+  "🥜 Nuts, Seeds & Pantry":["Chia seeds","Ground flaxseed","Hemp seeds","Raw walnuts","Raw almonds","Almond butter (no sugar added)","Tahini","Hummus — 10 oz tub","Rao's marinara — 1 jar","Salsa — 1 jar","Frozen shelled edamame — 1 bag"],
+  "🧂 Spices & Extras":["Extra virgin olive oil","Avocado oil","Balsamic vinegar","Low-sodium soy sauce / tamari","Everything bagel seasoning","Turmeric","Smoked paprika","Cumin","Chili powder","Italian seasoning","Za'atar","Cinnamon","Honey / maple syrup","Vanilla extract"],
+  "💧 Beverages":["Sparkling water — 1 case","Green tea bags","Decaf coffee (if watching caffeine)"]
+};
+
+const prepSteps = [
+  {time:"0:00", title:"Preheat & start slow items", items:["Preheat oven to 425°F","Start 1.5 cups dry quinoa in rice cooker or pot","Fill pot for 8 hard-boiled eggs, bring to boil"]},
+  {time:"0:10", title:"Sheet pans in oven", items:["Sheet 1: sweet potatoes + bell peppers + broccoli w/ olive oil","Sheet 2: 2 lbs chicken breasts w/ olive oil + garlic + oregano + paprika","Chicken 22–25 min, veg 25–30 min"]},
+  {time:"0:15", title:"Overnight oats (batch 3 jars)", items:["Per jar: ½ cup oats, ¾ cup almond milk, ½ cup Greek yogurt, 1 tbsp chia, 1 tbsp flax, cinnamon, vanilla","Cap, refrigerate. Add berries + walnuts each morning."]},
+  {time:"0:25", title:"Eggs done", items:["Boiled? Turn off heat, cover, timer 10 min → ice bath → peel → fridge"]},
+  {time:"0:35", title:"Sunday dinner OR turkey chili batch", items:["Option A: Turkey chili → 40 min simmer","Option B: Herb roasted chicken thighs → 40 min bake"]},
+  {time:"0:45", title:"Chop & wash produce", items:["Wash all berries; dry thoroughly (wet berries mold fast)","Dice cucumbers, halve cherry tomatoes","Cut bell peppers into snack strips","Portion 3 tbsp hummus + veggie sticks × 3"]},
+  {time:"1:00", title:"Ovens out", items:["Cool veg 10 min, pack into container","Slice 4 oz chicken × 4 into containers (lunch bases)","Portion 4 × ¾ cup quinoa into containers"]},
+  {time:"1:15", title:"Assemble Monday lunch", items:["Layer mason jar: dressing at bottom, quinoa, chicken, chickpeas, veg, feta on top","Tomorrow: grab-and-go ✅"]},
+  {time:"1:30", title:"DONE ✅", items:["Fridge has: 4 quinoa, 4 chicken, 4 veg, 3 oats jars, 8 eggs, chili/thighs, cut snacks","Estimated weekday time saved: 4+ hours"]}
+];
+
+// ============ RENDER ============
+function renderCalendar() {
+  const grid = document.getElementById('calendarGrid');
+  const days = [...new Set(meals.map(m => m.date))];
+  grid.innerHTML = days.map(date => {
+    const dayMeals = meals.filter(m => m.date === date);
+    const dayName = dayMeals[0].day;
+    const totals = dayMeals.reduce((a,m) => ({cal:a.cal+m.cal, p:a.p+m.p}), {cal:0, p:0});
+    const dateObj = new Date(date + 'T12:00:00');
+    const dateStr = dateObj.toLocaleDateString('en-US', {month:'short', day:'numeric'});
+    return `<div class="day-column">
+      <div class="day-header">
+        <div class="day-name">${dayName}</div>
+        <div class="day-date">${dateStr}</div>
+        <div class="day-totals">${totals.cal} cal · ${totals.p}g protein</div>
+      </div>
+      ${dayMeals.map(m => `
+        <div class="meal-card" onclick="jumpToRecipe('${m.recipe}')">
+          <div class="meal-type">${m.type}</div>
+          <div class="meal-name">${m.name}</div>
+          <div class="meal-macros">${m.cal} cal · <span class="prot">${m.p}g P</span></div>
+        </div>
+      `).join('')}
+    </div>`;
+  }).join('');
+}
+
+function renderRecipes() {
+  const grid = document.getElementById('recipeGrid');
+  grid.innerHTML = recipes.map(r => `
+    <div class="recipe-card" id="recipe-${r.id}">
+      <div class="recipe-title">${r.name}</div>
+      <div class="recipe-meta">${r.time}</div>
+      <div>
+        <span class="macro-pill">${r.macros.cal} cal</span>
+        <span class="macro-pill">${r.macros.p}g protein</span>
+        <span class="macro-pill">${r.macros.c}g carbs</span>
+        <span class="macro-pill">${r.macros.f}g fat</span>
+        <span class="macro-pill">${r.macros.fib}g fiber</span>
+      </div>
+      ${r.note ? `<div class="note">${r.note}</div>` : ''}
+      <div class="recipe-section-title">Ingredients</div>
+      <ul class="recipe-list">${r.ingredients.map(i => `<li>${i}</li>`).join('')}</ul>
+      <div class="recipe-section-title">Instructions</div>
+      <ol class="recipe-list recipe-instructions">${r.instructions.map(i => `<li>${i}</li>`).join('')}</ol>
+    </div>
+  `).join('');
+}
+
+function renderGrocery() {
+  const grid = document.getElementById('groceryGrid');
+  grid.innerHTML = Object.entries(grocery).map(([section, items]) => `
+    <div class="grocery-section">
+      <div class="grocery-header">${section}</div>
+      <ul class="grocery-items">
+        ${items.map((it,i) => `<li><input type="checkbox" id="g-${section}-${i}"><label for="g-${section}-${i}"><span>${it}</span></label></li>`).join('')}
+      </ul>
+    </div>
+  `).join('');
+}
+
+function renderPrep() {
+  const grid = document.getElementById('prepSteps');
+  grid.innerHTML = prepSteps.map(s => `
+    <div class="prep-step">
+      <div class="prep-time">${s.time}</div>
+      <div class="prep-title">${s.title}</div>
+      <ul class="prep-list">${s.items.map(i => `<li>${i}</li>`).join('')}</ul>
+    </div>
+  `).join('');
+}
+
+function showPanel(id, btn) {
+  document.querySelectorAll('.panel').forEach(p => p.classList.remove('active'));
+  document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+  btn.classList.add('active');
+}
+
+function jumpToRecipe(id) {
+  showPanel('recipes', document.querySelectorAll('.tab')[1]);
+  setTimeout(() => {
+    const el = document.getElementById('recipe-' + id);
+    if (el) { el.scrollIntoView({behavior:'smooth', block:'start'}); el.style.boxShadow = '0 0 0 3px var(--cp-accent)'; setTimeout(() => el.style.boxShadow = '', 2000); }
+  }, 100);
+}
+
+renderCalendar();
+renderRecipes();
+renderGrocery();
+renderPrep();
+</script>
+</body>
+</html>
