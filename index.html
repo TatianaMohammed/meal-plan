@@ -87,12 +87,26 @@ h1 { font-size:28px; font-weight:600; margin-bottom:4px; }
 .today-hero .today-totals { font-size:14px; margin-top:8px; opacity:.9; }
 .today-section { background:var(--cp-surface); border:1px solid var(--cp-border); border-radius:16px; padding:20px; margin-bottom:16px; box-shadow:0 0 2px rgba(0,0,0,.12),0 1px 2px rgba(0,0,0,.14); }
 .today-section h3 { font-size:16px; font-weight:600; color:var(--cp-accent); margin-bottom:12px; display:flex; align-items:center; gap:8px; }
-.today-meal { padding:12px; border-radius:10px; background:var(--cp-surface-soft); margin-bottom:8px; cursor:pointer; transition:background .15s; border-left:3px solid var(--cp-accent); }
+.today-meal { padding:12px; border-radius:10px; background:var(--cp-surface-soft); margin-bottom:8px; transition:background .15s; border-left:3px solid var(--cp-accent); display:flex; gap:12px; align-items:flex-start; }
 .today-meal:hover { background:var(--cp-accent-soft); }
+.today-meal.eaten { opacity:.5; background:var(--cp-surface); border-left-color:var(--cp-success); }
+.today-meal.eaten .today-meal-name { text-decoration:line-through; }
+.eaten-check { flex-shrink:0; margin-top:2px; }
+.eaten-check input[type="checkbox"] { width:20px; height:20px; accent-color:var(--cp-success); cursor:pointer; }
+.today-meal-body { flex-grow:1; cursor:pointer; }
 .today-meal-type { font-size:11px; text-transform:uppercase; color:var(--cp-text-muted); letter-spacing:.5px; font-weight:600; }
 .today-meal-name { font-size:15px; font-weight:500; margin:4px 0; }
 .today-meal-meta { font-size:12px; color:var(--cp-text-soft); }
 .today-meal-meta .time { color:var(--cp-success); font-weight:600; }
+.inventory-log { background:var(--cp-surface); border:1px solid var(--cp-border); border-radius:16px; padding:20px; margin-bottom:16px; box-shadow:0 0 2px rgba(0,0,0,.12),0 1px 2px rgba(0,0,0,.14); }
+.inventory-log h3 { color:var(--cp-accent); margin-bottom:12px; font-size:16px; }
+.inventory-item { padding:6px 0; font-size:14px; display:flex; justify-content:space-between; align-items:center; border-bottom:1px solid var(--cp-border); }
+.inventory-item:last-child { border-bottom:none; }
+.inventory-decrement { color:var(--cp-warning); font-size:12px; font-weight:600; }
+.progress-summary { background:var(--cp-highlight); padding:12px 16px; border-radius:10px; margin-bottom:16px; font-size:14px; }
+.progress-summary strong { color:var(--cp-accent); }
+.clear-btn { background:var(--cp-surface-soft); color:var(--cp-text); border:1px solid var(--cp-border); padding:6px 12px; border-radius:8px; cursor:pointer; font-family:inherit; font-size:12px; margin-left:8px; }
+.clear-btn:hover { background:var(--cp-accent-soft); }
 .prep-callout { background:var(--cp-highlight); border-left:4px solid var(--cp-warning); padding:12px 16px; border-radius:10px; margin-top:8px; }
 .prep-callout-title { font-weight:600; font-size:13px; color:var(--cp-text); margin-bottom:6px; }
 .prep-callout ul { padding-left:20px; margin:0; }
@@ -482,6 +496,53 @@ function getTodayISO() {
   return `${y}-${m}-${dd}`;
 }
 
+// Which inventory items each meal consumes
+const mealConsumes = {
+  "med-chicken-bowl": ["Chicken leg meat (mom's) 5 oz","Cooked quinoa ¾ cup","Roasted sweet potato ½ cup"],
+  "berry-smoothie": ["Ritual protein 1 scoop","Frozen banana half","Frozen blueberries ½ cup"],
+  "green-smoothie": ["Ritual protein 1 scoop","Frozen banana half","Avocado half"],
+  "kiwi-lentil-bread": ["Kiwi 1","Lentil bread 1 slice","Almond butter 1 tbsp"],
+  "kiwi-yogurt-bowl": ["Kiwi 1","Greek yogurt ¾ cup"],
+  "sheet-pan-salmon": ["Salmon fillets 2","Sweet potato 1","Asparagus 1 bunch"],
+  "salmon-nicoise": ["Salmon leftover 4 oz","Hard-boiled egg 1"],
+  "beef-chili": ["Ground beef 1 lb","Cooked black beans 1.5 cups","Kidney beans 1 can","Pasta sauce 1 jar"],
+  "ginger-salmon": ["Salmon fillet 1"],
+  "chicken-biryani": ["Chicken leg meat (mom's) 8-10 oz","Basmati rice 1 cup"],
+  "ribeye-chimichurri": ["Ribeye steak 1","Sweet potato half","Asparagus half bunch"],
+  "lentil-soup": ["GF chicken sausage 2 links","Green lentils 1 cup","Kale 2 cups","Diced tomatoes 1 can"],
+  "salmon-salad": ["Canned salmon 1 can","Mixed greens 2 cups","Avocado quarter"],
+  "zaatar-chicken": ["Chicken leg meat (mom's) 6-8 oz","Broccoli 2 cups","Cooked quinoa ¾ cup"],
+  "roasted-thighs": ["Chicken thighs 4","Brussels sprouts 1.5 lb","Sweet potatoes 2"],
+  "chia-pudding": ["Chia seeds 3 tbsp","Berries ½ cup"],
+  "egg-bake": ["Egg bake slice 1"],
+  "gf-overnight-oats": ["GF oats ½ cup","Greek yogurt ½ cup","Berries ½ cup","Walnuts 1 tbsp"],
+  "greek-yogurt-bowl": ["Greek yogurt ¾ cup","Blueberries ½ cup"],
+  "lentil-bread-ab": ["Lentil bread 1 slice","Almond butter 1 tbsp"],
+  "parm-crisps": ["Parm crisps 3","Almonds 15"],
+  "parm-chunk": ["Parm chunk 1 oz","Almonds 15"],
+  "simple-snack": ["Snack rotation"],
+  "return-home-bowl": ["Refried beans 1 can","Cheddar/mozz ¼ cup","Salsa","Rice crackers or rice pouch"],
+  "travel-snacks": ["Travel bag items"]
+};
+
+// localStorage: what's been eaten
+function getEaten() {
+  try { return JSON.parse(localStorage.getItem('mealsEaten') || '{}'); } catch(e) { return {}; }
+}
+function saveEaten(obj) { try { localStorage.setItem('mealsEaten', JSON.stringify(obj)); } catch(e){} }
+function toggleEaten(mealKey) {
+  const eaten = getEaten();
+  if (eaten[mealKey]) { delete eaten[mealKey]; } else { eaten[mealKey] = new Date().toISOString(); }
+  saveEaten(eaten);
+  renderToday();
+}
+function clearEaten() {
+  if (confirm('Clear all eaten marks for this week?')) {
+    localStorage.removeItem('mealsEaten');
+    renderToday();
+  }
+}
+
 // Day-specific prep tasks (what to do TONIGHT for tomorrow, or tomorrow AM)
 const prepAhead = {
   "2026-08-03": {tonight:["🥩 Pull ribeye from freezer → fridge to thaw (Wed dinner)","⚠️ Move up beef chili to TUE (using 4-day cooked black beans)","🍗 Verify shredded chicken container in fridge for tomorrow's lunch"], tomorrowAM:["Grab pre-made Chicken Med Bowl jar for lunch","Blend berry protein smoothie 5m in AM"]},
@@ -512,6 +573,16 @@ function renderToday() {
   const totals = allTodayMeals.reduce((a,m) => ({cal:a.cal+m.cal, p:a.p+m.p, fib:a.fib+m.fib}), {cal:0, p:0, fib:0});
   const dateStr = new Date(today+'T12:00:00').toLocaleDateString('en-US',{weekday:'long', month:'long', day:'numeric'});
   const prep = prepAhead[today] || {tonight:[], tomorrowAM:[]};
+  const eaten = getEaten();
+
+  // Compute eaten totals + consumed items
+  const eatenMeals = allTodayMeals.filter(m => eaten[`${m.date}|${m.type}`]);
+  const eatenTotals = eatenMeals.reduce((a,m) => ({cal:a.cal+m.cal, p:a.p+m.p}), {cal:0, p:0});
+  const consumedItems = [];
+  eatenMeals.forEach(m => {
+    const items = mealConsumes[m.recipe] || [];
+    items.forEach(it => consumedItems.push(it));
+  });
 
   // Find tomorrow
   const days = [...new Set(meals.map(m => m.date))].sort();
@@ -527,16 +598,37 @@ function renderToday() {
       <div class="today-totals">Daily target: ${totals.cal} cal · ${totals.p}g protein · ${totals.fib}g fiber</div>
     </div>
 
+    ${eatenMeals.length ? `
+    <div class="progress-summary">
+      <strong>✅ Eaten today:</strong> ${eatenMeals.length} of ${allTodayMeals.length} meals · ${eatenTotals.cal} cal · ${eatenTotals.p}g protein consumed
+      <button class="clear-btn" onclick="clearEaten()">Clear all</button>
+    </div>` : ''}
+
     <div class="today-section">
-      <h3>🍽️ Eat today</h3>
-      ${todayMeals.map(m => `
-        <div class="today-meal" onclick="jumpToRecipe('${m.recipe}')">
-          <div class="today-meal-type">${m.type}</div>
-          <div class="today-meal-name">${m.name}</div>
-          <div class="today-meal-meta"><span class="time">⏱ ${m.time}</span> · ${m.cal} cal · ${m.p}g protein</div>
-        </div>
-      `).join('')}
+      <h3>🍽️ Eat today <span style="font-weight:400; font-size:13px; color:var(--cp-text-muted);">— check the box when you eat it</span></h3>
+      ${todayMeals.map(m => {
+        const key = `${m.date}|${m.type}`;
+        const isEaten = !!eaten[key];
+        return `
+        <div class="today-meal ${isEaten ? 'eaten' : ''}">
+          <div class="eaten-check">
+            <input type="checkbox" ${isEaten ? 'checked' : ''} onchange="toggleEaten('${key}')" title="Mark as eaten">
+          </div>
+          <div class="today-meal-body" onclick="jumpToRecipe('${m.recipe}')">
+            <div class="today-meal-type">${m.type}</div>
+            <div class="today-meal-name">${m.name}</div>
+            <div class="today-meal-meta"><span class="time">⏱ ${m.time}</span> · ${m.cal} cal · ${m.p}g protein</div>
+          </div>
+        </div>`;
+      }).join('')}
     </div>
+
+    ${consumedItems.length ? `
+    <div class="inventory-log">
+      <h3>📦 Auto-deducted from inventory today</h3>
+      <div style="font-size:13px; color:var(--cp-text-muted); margin-bottom:8px;">Tell Scout to update the pantry file with these deducts.</div>
+      ${consumedItems.map(it => `<div class="inventory-item"><span>${it}</span><span class="inventory-decrement">- 1</span></div>`).join('')}
+    </div>` : ''}
 
     ${prep.tonight.length ? `
     <div class="today-section">
@@ -552,10 +644,12 @@ function renderToday() {
       ${prep.tomorrowAM.length ? `<div class="prep-callout"><div class="prep-callout-title">Morning grab-and-go</div><ul>${prep.tomorrowAM.map(t => `<li>${t}</li>`).join('')}</ul></div>` : ''}
       <div style="margin-top:12px;">
         ${tomorrowMeals.map(m => `
-          <div class="today-meal" onclick="jumpToRecipe('${m.recipe}')" style="opacity:.85;">
-            <div class="today-meal-type">${m.type}</div>
-            <div class="today-meal-name">${m.name}</div>
-            <div class="today-meal-meta"><span class="time">⏱ ${m.time}</span> · ${m.cal} cal · ${m.p}g P</div>
+          <div class="today-meal" style="opacity:.85;">
+            <div class="today-meal-body" onclick="jumpToRecipe('${m.recipe}')">
+              <div class="today-meal-type">${m.type}</div>
+              <div class="today-meal-name">${m.name}</div>
+              <div class="today-meal-meta"><span class="time">⏱ ${m.time}</span> · ${m.cal} cal · ${m.p}g P</div>
+            </div>
           </div>
         `).join('')}
       </div>
