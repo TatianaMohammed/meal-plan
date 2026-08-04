@@ -89,8 +89,17 @@ h1 { font-size:28px; font-weight:600; margin-bottom:4px; }
 .today-section h3 { font-size:16px; font-weight:600; color:var(--cp-accent); margin-bottom:12px; display:flex; align-items:center; gap:8px; }
 .today-meal { padding:12px; border-radius:10px; background:var(--cp-surface-soft); margin-bottom:8px; transition:background .15s; border-left:3px solid var(--cp-accent); display:flex; gap:12px; align-items:flex-start; }
 .today-meal:hover { background:var(--cp-accent-soft); }
-.today-meal.eaten { opacity:.5; background:var(--cp-surface); border-left-color:var(--cp-success); }
-.today-meal.eaten .today-meal-name { text-decoration:line-through; }
+.today-meal.skipped { opacity:.4; background:var(--cp-surface); border-left-color:var(--cp-text-muted); }
+.today-meal.skipped .today-meal-name { text-decoration:line-through; color:var(--cp-text-muted); }
+.today-meal.swapped { border-left-color:var(--cp-warning); background:var(--cp-highlight); }
+.meal-actions { display:flex; gap:6px; margin-top:6px; }
+.action-btn { background:var(--cp-surface-soft); border:1px solid var(--cp-border); color:var(--cp-text-muted); padding:3px 10px; border-radius:8px; cursor:pointer; font-family:inherit; font-size:11px; font-weight:600; text-transform:uppercase; letter-spacing:.5px; }
+.action-btn:hover { background:var(--cp-accent-soft); color:var(--cp-accent); border-color:var(--cp-accent); }
+.action-btn.skip { color:var(--cp-danger); }
+.action-btn.skip:hover { background:rgba(220,38,38,.1); color:var(--cp-danger); border-color:var(--cp-danger); }
+.action-btn.swap { color:var(--cp-warning); }
+.action-btn.swap:hover { background:rgba(245,158,11,.1); color:var(--cp-warning); border-color:var(--cp-warning); }
+.swap-note { font-size:12px; color:var(--cp-warning); margin-top:6px; font-style:italic; }
 .eaten-check { flex-shrink:0; display:flex; flex-direction:column; gap:4px; align-items:center; }
 .eaten-check-row { display:flex; gap:6px; align-items:center; }
 .eaten-check-row label { font-size:10px; font-weight:600; color:var(--cp-text-muted); text-transform:uppercase; letter-spacing:.5px; cursor:pointer; }
@@ -207,7 +216,7 @@ const meals = [
 {date:"2026-08-03",day:"Monday",type:"Breakfast",name:"2 Hard-Boiled Eggs (actual)",cal:160,p:13,c:1,f:11,fib:0,time:"1m",recipe:"simple-snack"},
 {date:"2026-08-03",day:"Monday",type:"Snack 1",name:"🥤 Berry Protein Smoothie + Creatine (actual)",cal:340,p:33,c:32,f:10,fib:7,time:"5m",recipe:"berry-smoothie"},
 {date:"2026-08-03",day:"Monday",type:"Lunch",name:"⚠️ Chicken bowl shifted to Tue (jar made)",cal:0,p:0,c:0,f:0,fib:0,time:"—",recipe:"med-chicken-bowl"},
-{date:"2026-08-03",day:"Monday",type:"Snack 2",name:"Apple + Almond Butter",cal:180,p:5,c:22,f:10,fib:5,time:"1m",recipe:"simple-snack"},
+{date:"2026-08-03",day:"Monday",type:"Snack 2",name:"🧀 Parm Chunk (actual — was apple + AB)",cal:180,p:12,c:3,f:14,fib:2,time:"1m",recipe:"parm-chunk"},
 {date:"2026-08-03",day:"Monday",type:"Dinner",name:"🐟 Sheet Pan Salmon + Asparagus + Sweet Potato",cal:470,p:36,c:32,f:20,fib:7,time:"25m",recipe:"sheet-pan-salmon"},
 {date:"2026-08-04",day:"Tuesday",type:"Breakfast",name:"Greek Yogurt Bowl + Berries + Chia (swap — smoothie used Mon)",cal:180,p:17,c:18,f:4,fib:5,time:"2m",recipe:"greek-yogurt-bowl"},
 {date:"2026-08-04",day:"Tuesday",type:"Snack 1",name:"🥝 Kiwi + Lentil Bread + Almond Butter",cal:260,p:11,c:32,f:12,fib:10,time:"2m",recipe:"kiwi-lentil-bread"},
@@ -536,17 +545,18 @@ const mealConsumes = {
   "travel-snacks": ["Travel bag items"]
 };
 
-// localStorage: what's been eaten, by person
-// Format: { "date|type": { t: true/false, k: true/false } }
+// localStorage: what's been eaten, skipped, or swapped, by person
+// Format: { "date|type": { t: true/false, k: true/false, skipped: bool, swap: {name, cal, p} } }
 function getEaten() {
-  try { return JSON.parse(localStorage.getItem('mealsEatenV2') || '{}'); } catch(e) { return {}; }
+  try { return JSON.parse(localStorage.getItem('mealsEatenV3') || '{}'); } catch(e) { return {}; }
 }
-function saveEaten(obj) { try { localStorage.setItem('mealsEatenV2', JSON.stringify(obj)); } catch(e){} }
+function saveEaten(obj) { try { localStorage.setItem('mealsEatenV3', JSON.stringify(obj)); } catch(e){} }
 function toggleEatenPerson(mealKey, person) {
   const eaten = getEaten();
   if (!eaten[mealKey]) eaten[mealKey] = {t:false, k:false};
   eaten[mealKey][person] = !eaten[mealKey][person];
-  if (!eaten[mealKey].t && !eaten[mealKey].k) delete eaten[mealKey];
+  // clean up if nothing marked
+  if (!eaten[mealKey].t && !eaten[mealKey].k && !eaten[mealKey].skipped && !eaten[mealKey].swap) delete eaten[mealKey];
   saveEaten(eaten);
   renderToday();
 }
@@ -555,16 +565,51 @@ function toggleEatenBoth(mealKey) {
   const current = eaten[mealKey] || {t:false, k:false};
   const bothChecked = current.t && current.k;
   if (bothChecked) {
-    delete eaten[mealKey];
+    delete current.t; delete current.k;
+    if (!current.skipped && !current.swap) delete eaten[mealKey]; else eaten[mealKey] = current;
   } else {
-    eaten[mealKey] = {t:true, k:true};
+    eaten[mealKey] = {...current, t:true, k:true, skipped:false};
   }
   saveEaten(eaten);
   renderToday();
 }
+function toggleSkip(mealKey) {
+  const eaten = getEaten();
+  const current = eaten[mealKey] || {};
+  if (current.skipped) {
+    delete current.skipped;
+    if (!current.t && !current.k && !current.swap) delete eaten[mealKey]; else eaten[mealKey] = current;
+  } else {
+    eaten[mealKey] = {t:false, k:false, skipped:true};
+  }
+  saveEaten(eaten);
+  renderToday();
+}
+function swapMeal(mealKey) {
+  const newName = prompt('What did you eat instead?', '');
+  if (!newName || !newName.trim()) return;
+  const calStr = prompt('Approximate calories?', '200');
+  const pStr = prompt('Approximate protein (g)?', '15');
+  const eaten = getEaten();
+  const current = eaten[mealKey] || {t:false, k:false};
+  eaten[mealKey] = {...current, swap: {name: newName.trim(), cal: parseInt(calStr)||0, p: parseInt(pStr)||0}, skipped:false};
+  saveEaten(eaten);
+  renderToday();
+}
+function clearSwap(mealKey) {
+  const eaten = getEaten();
+  const current = eaten[mealKey] || {};
+  delete current.swap;
+  if (!current.t && !current.k && !current.skipped) delete eaten[mealKey]; else eaten[mealKey] = current;
+  saveEaten(eaten);
+  renderToday();
+}
 function clearEaten() {
-  if (confirm('Clear all eaten marks for this week?')) {
-    localStorage.removeItem('mealsEatenV2');
+  if (confirm('Clear all eaten/skipped/swapped marks for today?')) {
+    const today = getTodayISO();
+    const eaten = getEaten();
+    Object.keys(eaten).forEach(k => { if (k.startsWith(today)) delete eaten[k]; });
+    saveEaten(eaten);
     renderToday();
   }
 }
@@ -602,15 +647,20 @@ function renderToday() {
   const prep = prepAhead[today] || {tonight:[], tomorrowAM:[]};
   const eaten = getEaten();
 
-  // Compute eaten totals + consumed items
+  // Compute per-person totals — skipped meals excluded; swaps use swap macros
   const eatenEntries = allTodayMeals.map(m => ({meal: m, e: eaten[`${m.date}|${m.type}`]})).filter(x => x.e);
-  const tCount = eatenEntries.filter(x => x.e.t).length;
-  const kCount = eatenEntries.filter(x => x.e.k).length;
-  const tTotals = eatenEntries.filter(x => x.e.t).reduce((a,x) => ({cal:a.cal+x.meal.cal, p:a.p+x.meal.p}), {cal:0, p:0});
-  const kTotals = eatenEntries.filter(x => x.e.k).reduce((a,x) => ({cal:a.cal+x.meal.cal, p:a.p+x.meal.p}), {cal:0, p:0});
-  const consumedItems = {}; // item -> count
-  eatenEntries.forEach(x => {
+  const activeEntries = eatenEntries.filter(x => !x.e.skipped);
+  const tCount = activeEntries.filter(x => x.e.t).length;
+  const kCount = activeEntries.filter(x => x.e.k).length;
+  const skippedCount = eatenEntries.filter(x => x.e.skipped).length;
+  const macrosFor = (x) => x.e.swap ? {cal: x.e.swap.cal, p: x.e.swap.p} : {cal: x.meal.cal, p: x.meal.p};
+  const tTotals = activeEntries.filter(x => x.e.t).reduce((a,x) => { const m = macrosFor(x); return {cal:a.cal+m.cal, p:a.p+m.p}; }, {cal:0, p:0});
+  const kTotals = activeEntries.filter(x => x.e.k).reduce((a,x) => { const m = macrosFor(x); return {cal:a.cal+m.cal, p:a.p+m.p}; }, {cal:0, p:0});
+  const consumedItems = {};
+  activeEntries.forEach(x => {
+    if (x.e.swap) return; // swaps: unknown inventory, skip auto-decrement
     const persons = (x.e.t ? 1 : 0) + (x.e.k ? 1 : 0);
+    if (persons === 0) return;
     const items = mealConsumes[x.meal.recipe] || [];
     items.forEach(it => { consumedItems[it] = (consumedItems[it] || 0) + persons; });
   });
@@ -633,36 +683,50 @@ function renderToday() {
     <div class="progress-summary">
       <div><strong>👩 Tatiana:</strong> ${tCount}/${allTodayMeals.length} meals · ${tTotals.cal} cal · ${tTotals.p}g P</div>
       <div style="margin-top:4px;"><strong>👨 Khalid:</strong> ${kCount}/${allTodayMeals.length} meals · ${kTotals.cal} cal · ${kTotals.p}g P</div>
-      <button class="clear-btn" onclick="clearEaten()" style="margin-top:8px;">Clear all</button>
+      ${skippedCount ? `<div style="margin-top:4px; color:var(--cp-text-muted); font-size:13px;">↳ ${skippedCount} meal(s) skipped (excluded from totals)</div>` : ''}
+      <button class="clear-btn" onclick="clearEaten()" style="margin-top:8px;">Clear today</button>
     </div>` : ''}
 
     <div class="today-section">
-      <h3>🍽️ Eat today <span style="font-weight:400; font-size:13px; color:var(--cp-text-muted);">— T = Tatiana, K = Khalid, Both = both</span></h3>
+      <h3>🍽️ Eat today <span style="font-weight:400; font-size:13px; color:var(--cp-text-muted);">— T = Tatiana, K = Khalid, Both = both. Use ⏭ Skip or 🔄 Swap if changed.</span></h3>
       ${todayMeals.map(m => {
         const key = `${m.date}|${m.type}`;
         const e = eaten[key] || {t:false, k:false};
         const anyEaten = e.t || e.k;
         const both = e.t && e.k;
+        const isSkipped = e.skipped;
+        const hasSwap = !!e.swap;
+        let cls = '';
+        if (isSkipped) cls = 'skipped';
+        else if (hasSwap) cls = 'swapped';
+        else if (anyEaten) cls = 'eaten';
         return `
-        <div class="today-meal ${anyEaten ? 'eaten' : ''}">
+        <div class="today-meal ${cls}">
           <div class="eaten-check">
             <div class="eaten-check-row">
-              <input type="checkbox" id="c-t-${key}" ${e.t ? 'checked' : ''} onchange="toggleEatenPerson('${key}','t')">
+              <input type="checkbox" id="c-t-${key}" ${e.t ? 'checked' : ''} ${isSkipped ? 'disabled' : ''} onchange="toggleEatenPerson('${key}','t')">
               <label for="c-t-${key}">T</label>
             </div>
             <div class="eaten-check-row">
-              <input type="checkbox" id="c-k-${key}" ${e.k ? 'checked' : ''} onchange="toggleEatenPerson('${key}','k')">
+              <input type="checkbox" id="c-k-${key}" ${e.k ? 'checked' : ''} ${isSkipped ? 'disabled' : ''} onchange="toggleEatenPerson('${key}','k')">
               <label for="c-k-${key}">K</label>
             </div>
             <div class="eaten-check-both">
-              <input type="checkbox" id="c-b-${key}" ${both ? 'checked' : ''} onchange="toggleEatenBoth('${key}')">
+              <input type="checkbox" id="c-b-${key}" ${both ? 'checked' : ''} ${isSkipped ? 'disabled' : ''} onchange="toggleEatenBoth('${key}')">
               <label for="c-b-${key}">Both</label>
             </div>
           </div>
-          <div class="today-meal-body" onclick="jumpToRecipe('${m.recipe}')">
-            <div class="today-meal-type">${m.type}</div>
-            <div class="today-meal-name">${m.name}</div>
-            <div class="today-meal-meta"><span class="time">⏱ ${m.time}</span> · ${m.cal} cal · ${m.p}g protein</div>
+          <div class="today-meal-body">
+            <div onclick="jumpToRecipe('${m.recipe}')" style="cursor:pointer;">
+              <div class="today-meal-type">${m.type}</div>
+              <div class="today-meal-name">${m.name}</div>
+              <div class="today-meal-meta"><span class="time">⏱ ${m.time}</span> · ${m.cal} cal · ${m.p}g protein</div>
+            </div>
+            ${hasSwap ? `<div class="swap-note">🔄 Swapped: <strong>${e.swap.name}</strong> (${e.swap.cal} cal · ${e.swap.p}g P) <button class="action-btn" onclick="clearSwap('${key}')" style="margin-left:8px; padding:1px 6px; font-size:10px;">undo</button></div>` : ''}
+            <div class="meal-actions">
+              <button class="action-btn skip" onclick="toggleSkip('${key}')">${isSkipped ? '↩ Unskip' : '⏭ Skip'}</button>
+              <button class="action-btn swap" onclick="swapMeal('${key}')">🔄 ${hasSwap ? 'Edit swap' : 'Swap'}</button>
+            </div>
           </div>
         </div>`;
       }).join('')}
