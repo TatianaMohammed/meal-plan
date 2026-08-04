@@ -91,8 +91,13 @@ h1 { font-size:28px; font-weight:600; margin-bottom:4px; }
 .today-meal:hover { background:var(--cp-accent-soft); }
 .today-meal.eaten { opacity:.5; background:var(--cp-surface); border-left-color:var(--cp-success); }
 .today-meal.eaten .today-meal-name { text-decoration:line-through; }
-.eaten-check { flex-shrink:0; margin-top:2px; }
-.eaten-check input[type="checkbox"] { width:20px; height:20px; accent-color:var(--cp-success); cursor:pointer; }
+.eaten-check { flex-shrink:0; display:flex; flex-direction:column; gap:4px; align-items:center; }
+.eaten-check-row { display:flex; gap:6px; align-items:center; }
+.eaten-check-row label { font-size:10px; font-weight:600; color:var(--cp-text-muted); text-transform:uppercase; letter-spacing:.5px; cursor:pointer; }
+.eaten-check-row input[type="checkbox"] { width:18px; height:18px; accent-color:var(--cp-success); cursor:pointer; }
+.eaten-check-both { display:flex; gap:6px; align-items:center; padding-top:4px; border-top:1px dashed var(--cp-border); }
+.eaten-check-both input[type="checkbox"] { width:16px; height:16px; accent-color:var(--cp-accent); cursor:pointer; }
+.eaten-check-both label { font-size:10px; font-weight:600; color:var(--cp-accent); text-transform:uppercase; letter-spacing:.5px; cursor:pointer; }
 .today-meal-body { flex-grow:1; cursor:pointer; }
 .today-meal-type { font-size:11px; text-transform:uppercase; color:var(--cp-text-muted); letter-spacing:.5px; font-weight:600; }
 .today-meal-name { font-size:15px; font-weight:500; margin:4px 0; }
@@ -525,20 +530,35 @@ const mealConsumes = {
   "travel-snacks": ["Travel bag items"]
 };
 
-// localStorage: what's been eaten
+// localStorage: what's been eaten, by person
+// Format: { "date|type": { t: true/false, k: true/false } }
 function getEaten() {
-  try { return JSON.parse(localStorage.getItem('mealsEaten') || '{}'); } catch(e) { return {}; }
+  try { return JSON.parse(localStorage.getItem('mealsEatenV2') || '{}'); } catch(e) { return {}; }
 }
-function saveEaten(obj) { try { localStorage.setItem('mealsEaten', JSON.stringify(obj)); } catch(e){} }
-function toggleEaten(mealKey) {
+function saveEaten(obj) { try { localStorage.setItem('mealsEatenV2', JSON.stringify(obj)); } catch(e){} }
+function toggleEatenPerson(mealKey, person) {
   const eaten = getEaten();
-  if (eaten[mealKey]) { delete eaten[mealKey]; } else { eaten[mealKey] = new Date().toISOString(); }
+  if (!eaten[mealKey]) eaten[mealKey] = {t:false, k:false};
+  eaten[mealKey][person] = !eaten[mealKey][person];
+  if (!eaten[mealKey].t && !eaten[mealKey].k) delete eaten[mealKey];
+  saveEaten(eaten);
+  renderToday();
+}
+function toggleEatenBoth(mealKey) {
+  const eaten = getEaten();
+  const current = eaten[mealKey] || {t:false, k:false};
+  const bothChecked = current.t && current.k;
+  if (bothChecked) {
+    delete eaten[mealKey];
+  } else {
+    eaten[mealKey] = {t:true, k:true};
+  }
   saveEaten(eaten);
   renderToday();
 }
 function clearEaten() {
   if (confirm('Clear all eaten marks for this week?')) {
-    localStorage.removeItem('mealsEaten');
+    localStorage.removeItem('mealsEatenV2');
     renderToday();
   }
 }
@@ -576,12 +596,16 @@ function renderToday() {
   const eaten = getEaten();
 
   // Compute eaten totals + consumed items
-  const eatenMeals = allTodayMeals.filter(m => eaten[`${m.date}|${m.type}`]);
-  const eatenTotals = eatenMeals.reduce((a,m) => ({cal:a.cal+m.cal, p:a.p+m.p}), {cal:0, p:0});
-  const consumedItems = [];
-  eatenMeals.forEach(m => {
-    const items = mealConsumes[m.recipe] || [];
-    items.forEach(it => consumedItems.push(it));
+  const eatenEntries = allTodayMeals.map(m => ({meal: m, e: eaten[`${m.date}|${m.type}`]})).filter(x => x.e);
+  const tCount = eatenEntries.filter(x => x.e.t).length;
+  const kCount = eatenEntries.filter(x => x.e.k).length;
+  const tTotals = eatenEntries.filter(x => x.e.t).reduce((a,x) => ({cal:a.cal+x.meal.cal, p:a.p+x.meal.p}), {cal:0, p:0});
+  const kTotals = eatenEntries.filter(x => x.e.k).reduce((a,x) => ({cal:a.cal+x.meal.cal, p:a.p+x.meal.p}), {cal:0, p:0});
+  const consumedItems = {}; // item -> count
+  eatenEntries.forEach(x => {
+    const persons = (x.e.t ? 1 : 0) + (x.e.k ? 1 : 0);
+    const items = mealConsumes[x.meal.recipe] || [];
+    items.forEach(it => { consumedItems[it] = (consumedItems[it] || 0) + persons; });
   });
 
   // Find tomorrow
@@ -598,21 +622,35 @@ function renderToday() {
       <div class="today-totals">Daily target: ${totals.cal} cal · ${totals.p}g protein · ${totals.fib}g fiber</div>
     </div>
 
-    ${eatenMeals.length ? `
+    ${eatenEntries.length ? `
     <div class="progress-summary">
-      <strong>✅ Eaten today:</strong> ${eatenMeals.length} of ${allTodayMeals.length} meals · ${eatenTotals.cal} cal · ${eatenTotals.p}g protein consumed
-      <button class="clear-btn" onclick="clearEaten()">Clear all</button>
+      <div><strong>👩 Tatiana:</strong> ${tCount}/${allTodayMeals.length} meals · ${tTotals.cal} cal · ${tTotals.p}g P</div>
+      <div style="margin-top:4px;"><strong>👨 Khalid:</strong> ${kCount}/${allTodayMeals.length} meals · ${kTotals.cal} cal · ${kTotals.p}g P</div>
+      <button class="clear-btn" onclick="clearEaten()" style="margin-top:8px;">Clear all</button>
     </div>` : ''}
 
     <div class="today-section">
-      <h3>🍽️ Eat today <span style="font-weight:400; font-size:13px; color:var(--cp-text-muted);">— check the box when you eat it</span></h3>
+      <h3>🍽️ Eat today <span style="font-weight:400; font-size:13px; color:var(--cp-text-muted);">— T = Tatiana, K = Khalid, Both = both</span></h3>
       ${todayMeals.map(m => {
         const key = `${m.date}|${m.type}`;
-        const isEaten = !!eaten[key];
+        const e = eaten[key] || {t:false, k:false};
+        const anyEaten = e.t || e.k;
+        const both = e.t && e.k;
         return `
-        <div class="today-meal ${isEaten ? 'eaten' : ''}">
+        <div class="today-meal ${anyEaten ? 'eaten' : ''}">
           <div class="eaten-check">
-            <input type="checkbox" ${isEaten ? 'checked' : ''} onchange="toggleEaten('${key}')" title="Mark as eaten">
+            <div class="eaten-check-row">
+              <input type="checkbox" id="c-t-${key}" ${e.t ? 'checked' : ''} onchange="toggleEatenPerson('${key}','t')">
+              <label for="c-t-${key}">T</label>
+            </div>
+            <div class="eaten-check-row">
+              <input type="checkbox" id="c-k-${key}" ${e.k ? 'checked' : ''} onchange="toggleEatenPerson('${key}','k')">
+              <label for="c-k-${key}">K</label>
+            </div>
+            <div class="eaten-check-both">
+              <input type="checkbox" id="c-b-${key}" ${both ? 'checked' : ''} onchange="toggleEatenBoth('${key}')">
+              <label for="c-b-${key}">Both</label>
+            </div>
           </div>
           <div class="today-meal-body" onclick="jumpToRecipe('${m.recipe}')">
             <div class="today-meal-type">${m.type}</div>
@@ -623,11 +661,11 @@ function renderToday() {
       }).join('')}
     </div>
 
-    ${consumedItems.length ? `
+    ${Object.keys(consumedItems).length ? `
     <div class="inventory-log">
       <h3>📦 Auto-deducted from inventory today</h3>
-      <div style="font-size:13px; color:var(--cp-text-muted); margin-bottom:8px;">Tell Scout to update the pantry file with these deducts.</div>
-      ${consumedItems.map(it => `<div class="inventory-item"><span>${it}</span><span class="inventory-decrement">- 1</span></div>`).join('')}
+      <div style="font-size:13px; color:var(--cp-text-muted); margin-bottom:8px;">Multiplier = # of people who ate the meal. Tell Scout to sync to pantry file when ready.</div>
+      ${Object.entries(consumedItems).map(([it, count]) => `<div class="inventory-item"><span>${it}</span><span class="inventory-decrement">× ${count}</span></div>`).join('')}
     </div>` : ''}
 
     ${prep.tonight.length ? `
