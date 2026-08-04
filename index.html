@@ -97,7 +97,11 @@ h1 { font-size:28px; font-weight:600; margin-bottom:4px; }
 .prep-callout-title { font-weight:600; font-size:13px; color:var(--cp-text); margin-bottom:6px; }
 .prep-callout ul { padding-left:20px; margin:0; }
 .prep-callout li { font-size:13px; padding:2px 0; }
-@media print { .tabs, .print-btn { display:none; } .panel { display:block !important; page-break-after:always; } }
+.snack-toggle { display:flex; align-items:center; gap:10px; margin-bottom:16px; padding:10px 16px; background:var(--cp-surface); border:1px solid var(--cp-border); border-radius:10px; box-shadow:0 0 2px rgba(0,0,0,.12),0 1px 2px rgba(0,0,0,.14); }
+.snack-toggle label { font-size:14px; font-weight:500; cursor:pointer; }
+.snack-toggle input[type="checkbox"] { accent-color:var(--cp-accent); cursor:pointer; width:16px; height:16px; }
+.snack-toggle .count { font-size:12px; color:var(--cp-text-muted); }
+@media print { .tabs, .print-btn, .snack-toggle { display:none; } .panel { display:block !important; page-break-after:always; } }
 </style>
 </head>
 <body>
@@ -117,10 +121,20 @@ h1 { font-size:28px; font-weight:600; margin-bottom:4px; }
   </div>
 
   <div id="today" class="panel active">
+    <div class="snack-toggle">
+      <input type="checkbox" id="hideSnacksToday" onchange="renderToday()">
+      <label for="hideSnacksToday">Hide snacks</label>
+      <span class="count" id="snackCountToday"></span>
+    </div>
     <div id="todayView"></div>
   </div>
 
   <div id="calendar" class="panel">
+    <div class="snack-toggle">
+      <input type="checkbox" id="hideSnacksCal" onchange="renderCalendar()">
+      <label for="hideSnacksCal">Hide snacks</label>
+      <span class="count" id="snackCountCal"></span>
+    </div>
     <div class="macro-grid">
       <div class="macro-card"><div class="macro-label">Daily Calories</div><div class="macro-value">~1,600</div><div class="macro-target">Wegovy + TTC</div></div>
       <div class="macro-card"><div class="macro-label">Protein</div><div class="macro-value">~125g</div><div class="macro-target">Preserves lean mass</div></div>
@@ -338,10 +352,16 @@ const prepSteps = [
 ];
 
 function renderCalendar() {
+  const hideSnacks = document.getElementById('hideSnacksCal')?.checked;
   const days = [...new Set(meals.map(m => m.date))];
+  const filteredMeals = hideSnacks ? meals.filter(m => !m.type.toLowerCase().includes('snack')) : meals;
+  const snackCount = meals.filter(m => m.type.toLowerCase().includes('snack')).length;
+  const countEl = document.getElementById('snackCountCal');
+  if (countEl) countEl.textContent = hideSnacks ? `(${snackCount} snacks hidden)` : `(${snackCount} snacks shown)`;
   document.getElementById('calendarGrid').innerHTML = days.map(date => {
-    const dayMeals = meals.filter(m => m.date === date);
-    const dayName = dayMeals[0].day;
+    const dayMeals = filteredMeals.filter(m => m.date === date);
+    if (dayMeals.length === 0) return '';
+    const dayName = meals.find(m => m.date === date).day;
     const isToday = date === TODAY;
     const totals = dayMeals.reduce((a,m) => ({cal:a.cal+m.cal, p:a.p+m.p}), {cal:0, p:0});
     const dateStr = new Date(date+'T12:00:00').toLocaleDateString('en-US', {month:'short', day:'numeric'});
@@ -467,8 +487,13 @@ const prepAhead = {
 };
 
 function renderToday() {
+  const hideSnacks = document.getElementById('hideSnacksToday')?.checked;
   const today = getTodayISO();
-  const todayMeals = meals.filter(m => m.date === today);
+  const allTodayMeals = meals.filter(m => m.date === today);
+  const todayMeals = hideSnacks ? allTodayMeals.filter(m => !m.type.toLowerCase().includes('snack')) : allTodayMeals;
+  const snackCount = allTodayMeals.filter(m => m.type.toLowerCase().includes('snack')).length;
+  const countEl = document.getElementById('snackCountToday');
+  if (countEl) countEl.textContent = hideSnacks ? `(${snackCount} today's snacks hidden)` : `(${snackCount} today's snacks shown)`;
   const container = document.getElementById('todayView');
 
   if (todayMeals.length === 0) {
@@ -476,8 +501,8 @@ function renderToday() {
     return;
   }
 
-  const dayName = todayMeals[0].day;
-  const totals = todayMeals.reduce((a,m) => ({cal:a.cal+m.cal, p:a.p+m.p, fib:a.fib+m.fib}), {cal:0, p:0, fib:0});
+  const dayName = allTodayMeals[0].day;
+  const totals = allTodayMeals.reduce((a,m) => ({cal:a.cal+m.cal, p:a.p+m.p, fib:a.fib+m.fib}), {cal:0, p:0, fib:0});
   const dateStr = new Date(today+'T12:00:00').toLocaleDateString('en-US',{weekday:'long', month:'long', day:'numeric'});
   const prep = prepAhead[today] || {tonight:[], tomorrowAM:[]};
 
@@ -485,7 +510,8 @@ function renderToday() {
   const days = [...new Set(meals.map(m => m.date))].sort();
   const idx = days.indexOf(today);
   const tomorrow = idx >= 0 && idx < days.length-1 ? days[idx+1] : null;
-  const tomorrowMeals = tomorrow ? meals.filter(m => m.date === tomorrow) : [];
+  const allTomorrowMeals = tomorrow ? meals.filter(m => m.date === tomorrow) : [];
+  const tomorrowMeals = hideSnacks ? allTomorrowMeals.filter(m => !m.type.toLowerCase().includes('snack')) : allTomorrowMeals;
 
   container.innerHTML = `
     <div class="today-hero">
