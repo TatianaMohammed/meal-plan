@@ -136,11 +136,11 @@ h1 { font-size:28px; font-weight:600; margin-bottom:4px; }
       <span class="count" id="snackCountCal"></span>
     </div>
     <div class="macro-grid">
-      <div class="macro-card"><div class="macro-label">Daily Calories</div><div class="macro-value">~1,600</div><div class="macro-target">Wegovy + TTC</div></div>
+      <div class="macro-card"><div class="macro-label">Daily Calories</div><div class="macro-value">~1,600</div><div class="macro-target">Weight-loss target</div></div>
       <div class="macro-card"><div class="macro-label">Protein</div><div class="macro-value">~125g</div><div class="macro-target">Preserves lean mass</div></div>
       <div class="macro-card"><div class="macro-label">Carbs</div><div class="macro-value">~150g</div><div class="macro-target">All GF sources</div></div>
-      <div class="macro-card"><div class="macro-label">Fat</div><div class="macro-value">~55g</div><div class="macro-target">Salmon DHA + olive oil</div></div>
-      <div class="macro-card"><div class="macro-label">Fiber</div><div class="macro-value">≥30g</div><div class="macro-target">Anti-inflammatory</div></div>
+      <div class="macro-card"><div class="macro-label">Fat</div><div class="macro-value">~55g</div><div class="macro-target">Salmon omega-3 + olive oil</div></div>
+      <div class="macro-card"><div class="macro-label">Fiber</div><div class="macro-value">≥30g</div><div class="macro-target">Gut + inflammation</div></div>
     </div>
     <div class="calendar" id="calendarGrid"></div>
   </div>
@@ -156,31 +156,32 @@ h1 { font-size:28px; font-weight:600; margin-bottom:4px; }
   </div>
   <div id="guide" class="panel">
     <div class="callout"><h3>This Week's Design Rules</h3><ul>
-      <li><strong>4'11" · 196 lbs · Wegovy · TTC · GF · No shellfish</strong></li>
-      <li>🐟 <strong>All fresh fish clustered Mon-Wed</strong> (salmon safety)</li>
+      <li><strong>GF · No shellfish · High-protein</strong></li>
+      <li>🐟 <strong>All fresh fish clustered Mon-Thu</strong></li>
       <li>🥗 <strong>2 batch dressings only</strong>: Lemon-oregano vinaigrette + Miso-tahini creamy</li>
-      <li>🔪 <strong>All shredding + roasting done Sunday</strong> — weekday lunches = true grab-and-go</li>
+      <li>🔪 <strong>All shredding + roasting done Sunday</strong> — weekday lunches = grab-and-go</li>
+      <li>🚗 Weekend travel Sat-Sun — pantry-only Sun return dinner</li>
     </ul></div>
-    <div class="callout"><h3>TTC Guardrails</h3><ul>
-      <li>✅ 3 salmon meals + canned salmon = high DHA</li>
+    <div class="callout"><h3>Nutrition Highlights</h3><ul>
+      <li>✅ 2 salmon meals (fresh) + canned salmon = omega-3s</li>
       <li>✅ Eggs 5x for choline</li>
       <li>✅ Ribeye Wed = iron + zinc + B12</li>
-      <li>✅ Lentils + chickpeas + spinach for folate</li>
-      <li>✅ Kiwi vitamin C boosts iron absorption from ribeye + lentils</li>
-      <li>⚠️ Caffeine ≤200 mg/day</li>
+      <li>✅ Lentils + chickpeas + spinach = folate + iron</li>
+      <li>✅ Kiwi vitamin C boosts iron absorption</li>
+      <li>✅ Turmeric + ginger + berries throughout</li>
     </ul></div>
-    <div class="callout"><h3>Wegovy Tips</h3><ul>
+    <div class="callout"><h3>Eating Tips</h3><ul>
       <li>Protein first, always</li>
       <li>Sip liquids AWAY from meals (30 min before/after)</li>
       <li>Portion small; save the rest</li>
-      <li>Cold foods on nauseous days</li>
+      <li>Cold foods on rough days (chia pudding, salmon salad)</li>
       <li>Ginger tea = anti-inflammatory + settles nausea</li>
     </ul></div>
   </div>
 </div>
 
 <script>
-document.getElementById('weekSubtitle').textContent = `Week of Aug 3–9, 2026 · GF · High-protein · Anti-inflammatory · TTC-safe · Wegovy-friendly · Last updated ${new Date().toLocaleDateString('en-US',{month:'short',day:'numeric',year:'numeric'})}`;
+document.getElementById('weekSubtitle').textContent = `Week of Aug 3–9, 2026 · GF · High-protein · No shellfish · Last updated ${new Date().toLocaleDateString('en-US',{month:'short',day:'numeric',year:'numeric'})}`;
 const TODAY = "2026-08-03";
 
 const meals = [
@@ -252,7 +253,7 @@ const recipes = [
  instructions:["Layer in mason jar with vinaigrette at bottom.","Shake before eating."]},
 {id:"ribeye-chimichurri",name:"🥩 Ribeye + Chimichurri + Sweet Potato + Asparagus",time:"25m (+20m ribeye temper)",prep:"Chimichurri can be pre-made Sunday",macros:{cal:550,p:42,c:22,f:34,fib:6},
  ingredients:["6-8 oz ribeye, room temp 20 min","½ sweet potato diced ½\"","½ bunch asparagus","1 tbsp avocado oil (high-heat sear)","Salt, pepper, garlic powder","Chimichurri (pre-made in fridge)"],
- instructions:["400°F. Roast veg w/ olive oil + salt 20 min.","Pat ribeye VERY dry. Season salt + pepper + garlic.","Cast iron on HIGH until smoking. Add avocado oil.","Sear ribeye 3 min per side to medium-rare (135°F internal).","REST 5 min. Slice against grain. Top w/ chimichurri."],note:"TTC gold: iron + zinc + B12 in one meal."},
+ instructions:["400°F. Roast veg w/ olive oil + salt 20 min.","Pat ribeye VERY dry. Season salt + pepper + garlic.","Cast iron on HIGH until smoking. Add avocado oil.","Sear ribeye 3 min per side to medium-rare (135°F internal).","REST 5 min. Slice against grain. Top w/ chimichurri."],note:"Iron + zinc + B12 powerhouse in one meal."},
 {id:"beef-chili",name:"🥩 Beef Chili + Avocado",time:"25m, 6 servings",prep:"Pre-chopped onion + pepper saves time",macros:{cal:470,p:38,c:42,f:16,fib:14},
  ingredients:["1 tbsp olive oil","1 onion + 1 bell pepper diced (pre-chopped)","3 garlic cloves","1 lb ground beef","2 tbsp chili powder + 1 tbsp cumin + 1 tsp paprika + ½ tsp cinnamon","1 tbsp tomato paste","Cooked black beans (pantry — 1½ cups)","1 can kidney beans","1 jar red pasta sauce","1 cup broth","Toppings: avocado + Greek yogurt + cilantro"],
  instructions:["Sauté onion + pepper 5 min. Add garlic 30 sec.","Brown beef 5 min. Add spices + paste 1 min.","Add beans + sauce + broth. Simmer 20 min.","Top with avocado + yogurt + cilantro."]},
@@ -470,7 +471,7 @@ renderCalendar();
 renderRecipes();
 renderGrocery();
 renderPrep();
-renderToday();
+// renderToday called at end after prepAhead is defined
 
 function getTodayISO() {
   // Get YYYY-MM-DD in the user's local timezone
@@ -561,6 +562,8 @@ function renderToday() {
     </div>` : ''}
   `;
 }
+
+renderToday();
 </script>
 </body>
 </html>
