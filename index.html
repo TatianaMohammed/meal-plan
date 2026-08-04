@@ -81,6 +81,22 @@ h1 { font-size:28px; font-weight:600; margin-bottom:4px; }
 .callout li { padding:4px 0; font-size:14px; }
 .print-btn { background:var(--cp-accent); color:var(--cp-accent-fg); border:none; padding:8px 16px; border-radius:10px; cursor:pointer; font-family:inherit; font-size:14px; font-weight:500; }
 .print-btn:hover { background:var(--cp-accent-hover); }
+.today-hero { background:linear-gradient(135deg, var(--cp-accent) 0%, var(--cp-accent-hover) 100%); color:#fff; padding:24px; border-radius:16px; margin-bottom:20px; box-shadow:0 4px 12px rgba(0,0,0,.15); }
+.today-hero h2 { font-size:24px; font-weight:600; margin-bottom:4px; }
+.today-hero .today-date { font-size:14px; opacity:.9; }
+.today-hero .today-totals { font-size:14px; margin-top:8px; opacity:.9; }
+.today-section { background:var(--cp-surface); border:1px solid var(--cp-border); border-radius:16px; padding:20px; margin-bottom:16px; box-shadow:0 0 2px rgba(0,0,0,.12),0 1px 2px rgba(0,0,0,.14); }
+.today-section h3 { font-size:16px; font-weight:600; color:var(--cp-accent); margin-bottom:12px; display:flex; align-items:center; gap:8px; }
+.today-meal { padding:12px; border-radius:10px; background:var(--cp-surface-soft); margin-bottom:8px; cursor:pointer; transition:background .15s; border-left:3px solid var(--cp-accent); }
+.today-meal:hover { background:var(--cp-accent-soft); }
+.today-meal-type { font-size:11px; text-transform:uppercase; color:var(--cp-text-muted); letter-spacing:.5px; font-weight:600; }
+.today-meal-name { font-size:15px; font-weight:500; margin:4px 0; }
+.today-meal-meta { font-size:12px; color:var(--cp-text-soft); }
+.today-meal-meta .time { color:var(--cp-success); font-weight:600; }
+.prep-callout { background:var(--cp-highlight); border-left:4px solid var(--cp-warning); padding:12px 16px; border-radius:10px; margin-top:8px; }
+.prep-callout-title { font-weight:600; font-size:13px; color:var(--cp-text); margin-bottom:6px; }
+.prep-callout ul { padding-left:20px; margin:0; }
+.prep-callout li { font-size:13px; padding:2px 0; }
 @media print { .tabs, .print-btn { display:none; } .panel { display:block !important; page-break-after:always; } }
 </style>
 </head>
@@ -92,14 +108,19 @@ h1 { font-size:28px; font-weight:600; margin-bottom:4px; }
 
 <div class="container">
   <div class="tabs">
-    <button class="tab active" onclick="showPanel('calendar', this)">📅 Calendar</button>
+    <button class="tab active" onclick="showPanel('today', this)">🌟 Today</button>
+    <button class="tab" onclick="showPanel('calendar', this)">📅 Calendar</button>
     <button class="tab" onclick="showPanel('recipes', this)">🍳 Recipes</button>
     <button class="tab" onclick="showPanel('grocery', this)">🛒 Grocery</button>
     <button class="tab" onclick="showPanel('prep', this)">⏱️ Sunday Prep</button>
     <button class="tab" onclick="showPanel('guide', this)">💡 Guide</button>
   </div>
 
-  <div id="calendar" class="panel active">
+  <div id="today" class="panel active">
+    <div id="todayView"></div>
+  </div>
+
+  <div id="calendar" class="panel">
     <div class="macro-grid">
       <div class="macro-card"><div class="macro-label">Daily Calories</div><div class="macro-value">~1,600</div><div class="macro-target">Wegovy + TTC</div></div>
       <div class="macro-card"><div class="macro-label">Protein</div><div class="macro-value">~125g</div><div class="macro-target">Preserves lean mass</div></div>
@@ -423,6 +444,91 @@ renderCalendar();
 renderRecipes();
 renderGrocery();
 renderPrep();
+renderToday();
+
+function getTodayISO() {
+  // Get YYYY-MM-DD in the user's local timezone
+  const d = new Date();
+  const y = d.getFullYear();
+  const m = String(d.getMonth()+1).padStart(2,'0');
+  const dd = String(d.getDate()).padStart(2,'0');
+  return `${y}-${m}-${dd}`;
+}
+
+// Day-specific prep tasks (what to do TONIGHT for tomorrow, or tomorrow AM)
+const prepAhead = {
+  "2026-08-03": {tonight:["🥩 Pull ribeye from freezer → fridge to thaw (Wed dinner)","🌾 Verify overnight oats jar is in fridge for Sun/Thu","🍗 Verify shredded chicken container in fridge for tomorrow's lunch bowl"], tomorrowAM:["Grab pre-made Chicken Med Bowl jar for lunch (already assembled)","Blend berry protein smoothie 5m in AM"]},
+  "2026-08-04": {tonight:["🥩 Confirm ribeye is thawing (should be soft by Wed AM)","🌱 Make chia pudding for Thu breakfast: 3 tbsp chia + 1 cup almond milk + vanilla + cinnamon + 1 tsp maple in jar → fridge"], tomorrowAM:["Grab egg bake square + lentil bread","Pack Wed lunch = Salmon Nicoise leftover from Mon night salmon"]},
+  "2026-08-05": {tonight:["🥩 Ribeye night! Reduce fridge = give it a few hrs at room temp before searing","🥬 Verify Thu lunch soup portioned in fridge"], tomorrowAM:["Grab chia pudding + berries + walnuts","Pack Thu lunch = Lentil soup container"]},
+  "2026-08-06": {tonight:["🥩 Batch beef chili tonight → 6 portions, freezer 3","🍗 Pull ~10 oz shredded chicken from fridge for tomorrow's biryani"], tomorrowAM:["Blend green smoothie","Pack Fri lunch = Chili leftover"]},
+  "2026-08-07": {tonight:["🍛 Biryani night — mise en place 15 min before starting","🌾 Make Sat egg bake #2 morning if desired, or grab existing squares"], tomorrowAM:["Grab egg bake + berries","Sat lunch = canned salmon salad (fresh assembly, 8 min)"]},
+  "2026-08-08": {tonight:["🍗 Pull chicken thighs from fridge for Sun dinner (season overnight for max flavor)","🌾 Verify last overnight oats jar is set for Sun AM"], tomorrowAM:["Grab overnight oats","Sun lunch = Lentil soup leftover"]},
+  "2026-08-09": {tonight:["📋 Review week — what worked, what didn't → tell Scout","🛒 Plan next week's grocery list from remaining freezer/pantry"], tomorrowAM:["🎉 Week complete!"]}
+};
+
+function renderToday() {
+  const today = getTodayISO();
+  const todayMeals = meals.filter(m => m.date === today);
+  const container = document.getElementById('todayView');
+
+  if (todayMeals.length === 0) {
+    container.innerHTML = `<div class="today-hero"><h2>No plan for today</h2><div class="today-date">${new Date().toLocaleDateString('en-US',{weekday:'long', month:'long', day:'numeric', year:'numeric'})}</div><div style="margin-top:12px;">This week runs Aug 3–9. Check the Calendar tab.</div></div>`;
+    return;
+  }
+
+  const dayName = todayMeals[0].day;
+  const totals = todayMeals.reduce((a,m) => ({cal:a.cal+m.cal, p:a.p+m.p, fib:a.fib+m.fib}), {cal:0, p:0, fib:0});
+  const dateStr = new Date(today+'T12:00:00').toLocaleDateString('en-US',{weekday:'long', month:'long', day:'numeric'});
+  const prep = prepAhead[today] || {tonight:[], tomorrowAM:[]};
+
+  // Find tomorrow
+  const days = [...new Set(meals.map(m => m.date))].sort();
+  const idx = days.indexOf(today);
+  const tomorrow = idx >= 0 && idx < days.length-1 ? days[idx+1] : null;
+  const tomorrowMeals = tomorrow ? meals.filter(m => m.date === tomorrow) : [];
+
+  container.innerHTML = `
+    <div class="today-hero">
+      <h2>${dayName} · What's on the plan</h2>
+      <div class="today-date">${dateStr}</div>
+      <div class="today-totals">Daily target: ${totals.cal} cal · ${totals.p}g protein · ${totals.fib}g fiber</div>
+    </div>
+
+    <div class="today-section">
+      <h3>🍽️ Eat today</h3>
+      ${todayMeals.map(m => `
+        <div class="today-meal" onclick="jumpToRecipe('${m.recipe}')">
+          <div class="today-meal-type">${m.type}</div>
+          <div class="today-meal-name">${m.name}</div>
+          <div class="today-meal-meta"><span class="time">⏱ ${m.time}</span> · ${m.cal} cal · ${m.p}g protein</div>
+        </div>
+      `).join('')}
+    </div>
+
+    ${prep.tonight.length ? `
+    <div class="today-section">
+      <h3>🌙 Tonight prep (for tomorrow)</h3>
+      <div class="prep-callout">
+        <ul>${prep.tonight.map(t => `<li>${t}</li>`).join('')}</ul>
+      </div>
+    </div>` : ''}
+
+    ${tomorrowMeals.length ? `
+    <div class="today-section">
+      <h3>🌅 Tomorrow — ${tomorrowMeals[0].day}</h3>
+      ${prep.tomorrowAM.length ? `<div class="prep-callout"><div class="prep-callout-title">Morning grab-and-go</div><ul>${prep.tomorrowAM.map(t => `<li>${t}</li>`).join('')}</ul></div>` : ''}
+      <div style="margin-top:12px;">
+        ${tomorrowMeals.map(m => `
+          <div class="today-meal" onclick="jumpToRecipe('${m.recipe}')" style="opacity:.85;">
+            <div class="today-meal-type">${m.type}</div>
+            <div class="today-meal-name">${m.name}</div>
+            <div class="today-meal-meta"><span class="time">⏱ ${m.time}</span> · ${m.cal} cal · ${m.p}g P</div>
+          </div>
+        `).join('')}
+      </div>
+    </div>` : ''}
+  `;
+}
 </script>
 </body>
 </html>
