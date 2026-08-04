@@ -312,6 +312,10 @@ const recipes = [
 {id:"simple-snack",name:"Simple snacks (rotation)",time:"1-3m",macros:{cal:170,p:10,c:15,f:9,fib:4},
  ingredients:["Apple + 1 tbsp almond butter","2 hard-boiled eggs + everything seasoning","Hummus + cucumber + bell pepper","1 cup shelled edamame + sea salt"],
  instructions:["Pick one."]},
+{id:"lentil-bread-bake",name:"🍞 Homemade Red Lentil Bread (batch bake)",time:"2-4h soak + 45m bake, yields 6-8 slices",prep:"BATCH — bake weekly",macros:{cal:130,p:9,c:20,f:3,fib:6},
+ ingredients:["1 cup red lentils, dry","½ cup water","2 large eggs","2 tbsp olive oil","1 tsp baking powder","½ tsp salt","Optional: 1 tsp dried herbs (rosemary/thyme), garlic powder, sesame/pumpkin seeds on top"],
+ instructions:["Soak lentils in cold water 2-4 hours. Drain + rinse.","Preheat oven to 350°F. Grease a small loaf pan (9×5 or similar).","Blend everything smooth in high-speed blender or food processor (30-60 sec).","Pour batter into loaf pan. Optional: sprinkle seeds on top.","Bake 40-45 min until top is golden brown and firm when pressed.","Cool COMPLETELY on rack before slicing (30+ min — cuts cleanly cold).","Slice into ~6-8 pieces. Store in fridge 5 days or freezer 2 months."],
+ note:"Per slice: ~130 cal, 9g P, 6g fiber, naturally GF, high folate + iron."},
 {id:"travel-snacks",name:"🚗 Weekend Travel Snacks",time:"Pack Fri night",prep:"Pack cooler + dry bag Fri PM",macros:{cal:170,p:10,c:18,f:9,fib:5},
  ingredients:["Cooler bag:","- 4 hard-boiled eggs (in shell)","- Hummus + carrots/peppers in container","- Greek yogurt cups","- Pre-made smoothie in insulated bottle (Sat AM)","Dry bag:","- Lentil bread slices in ziploc","- Individual almond butter packets (RxBar, Justin's)","- 2 apples","- Parm crisps in ziploc","- Baggies of raw almonds","- 4 hard-boiled eggs (day 1 only)","- Green tea bags","- Water"],
  instructions:["Fri night pack cooler + dry bag.","Grab-and-go Sat AM.","Eat out for lunch + dinner as planned.","Sun: eat remaining snacks on drive home."],note:"NO fresh salmon, egg bake, or salad for weekend — those got eaten Mon-Thu."},
@@ -361,7 +365,8 @@ const grocery = {
 };
 
 const prepSteps = [
-{time:"0:00",title:"Preheat & set up",items:["Preheat oven to 375°F for egg bake","Fill pot for 6 hard-boiled eggs → boil","Set up quinoa: 1 cup dry + 2 cups water in rice cooker"]},
+{time:"0:00",title:"🍞 Lentil bread — START HERE (needs soak time)",items:["Soak 1 cup red lentils in water 2-4 hours (do this FIRST — will run in background)","After soak: blend soaked lentils + ½ cup water + 2 eggs + 2 tbsp olive oil + 1 tsp baking powder + ½ tsp salt","Pour into greased loaf pan","Bake 350°F for 40-45 min until golden","Cool completely before slicing","Yields ~6-8 slices — covers Mon/Tue/Wed/Fri/Sat needs"]},
+{time:"0:00 (parallel)",title:"Preheat & set up",items:["Preheat oven to 375°F for egg bake","Fill pot for 6 hard-boiled eggs → boil","Set up quinoa: 1 cup dry + 2 cups water in rice cooker"]},
 {time:"0:05",title:"🍳 Egg bake — batch 4 servings",items:["Wilt 4 cups spinach 1 min in dry pan, squeeze water","Blend ¾ cup cottage cheese SMOOTH","Whisk cottage cheese + 8 eggs + garlic powder + salt + pepper + turmeric","Fold in spinach + ½ cup feta + 2 green onions","Pour into greased 8×8 dish, bake 30-35 min"]},
 {time:"0:15",title:"🌾 Overnight oats — batch 3 jars",items:["Per jar: ½ cup GF oats + ¾ cup almond milk + ½ cup yogurt + 1 tbsp chia + 1 tbsp flax + cinnamon + vanilla","Refrigerate — add berries + walnuts each morning"]},
 {time:"0:20",title:"🍲 Lentil soup — batch 4 servings",items:["Sauté 1 chopped onion + 3 garlic + 2 GF sausages","Add 1 cup lentils + 1 can tomatoes + 4 cups broth + spices","Simmer 25 min. Add kale last 3 min. Portion into 4 containers."]},
@@ -504,6 +509,7 @@ function getTodayISO() {
 // Which inventory items each meal consumes
 const mealConsumes = {
   "med-chicken-bowl": ["Chicken leg meat (mom's) 5 oz","Cooked quinoa ¾ cup","Roasted sweet potato ½ cup"],
+  "lentil-bread-bake": ["Red lentils 1 cup dry","Eggs 2","Baking powder"],
   "berry-smoothie": ["Ritual protein 1 scoop","Frozen banana half","Frozen blueberries ½ cup"],
   "green-smoothie": ["Ritual protein 1 scoop","Frozen banana half","Avocado half"],
   "kiwi-lentil-bread": ["Kiwi 1","Lentil bread 1 slice","Almond butter 1 tbsp"],
@@ -565,7 +571,7 @@ function clearEaten() {
 
 // Day-specific prep tasks (what to do TONIGHT for tomorrow, or tomorrow AM)
 const prepAhead = {
-  "2026-08-03": {tonight:["🥩 Pull ribeye from freezer → fridge to thaw (Wed dinner)","⚠️ Move up beef chili to TUE (using 4-day cooked black beans)","🍗 Verify shredded chicken container in fridge for tomorrow's lunch"], tomorrowAM:["Grab pre-made Chicken Med Bowl jar for lunch","Blend berry protein smoothie 5m in AM"]},
+  "2026-08-03": {tonight:["🍞 START lentil bread NOW: soak 1 cup red lentils 2-4 hours (need 5 slices this week)","🥩 Pull ribeye from freezer → fridge to thaw (Wed dinner)","⚠️ Move up beef chili to TUE (using 4-day cooked black beans)","🍗 Verify shredded chicken container in fridge for tomorrow's lunch","🍞 After lentils soaked: blend + bake 40 min at 350°F"], tomorrowAM:["Grab pre-made Chicken Med Bowl jar for lunch","Blend berry protein smoothie 5m in AM","🍞 Slice cooled lentil bread → store in fridge/freezer"]},
   "2026-08-04": {tonight:["🥩 Batch beef chili tonight (25 min, uses cooked black beans + kidney beans + jarred sauce)","🥩 Confirm ribeye thawing for Wed","🌱 Make chia pudding for Thu breakfast: 3 tbsp chia + 1 cup almond milk + vanilla + cinnamon + 1 tsp maple → fridge"], tomorrowAM:["Grab egg bake square + lentil bread","Pack Wed lunch = Salmon Nicoise mason jar (leftover)"]},
   "2026-08-05": {tonight:["🥩 RIBEYE NIGHT tonight — let rest at room temp 20 min","💧 Extra hydration (ribeye + salt = thirst)","🌱 Chia pudding still going for Thu"], tomorrowAM:["Grab chia pudding + berries + walnuts","Pack Thu lunch = lentil soup container"]},
   "2026-08-06": {tonight:["🐟 LAST FRESH FISH night — ginger salmon (15 min)","🍲 Verify Fri lunch = chili leftover portion in fridge","🍗 Verify remaining shredded chicken for Fri dinner"], tomorrowAM:["Blend green smoothie","Pack Fri lunch = chili leftover"]},
