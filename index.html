@@ -138,7 +138,7 @@ h1 { font-size:28px; font-weight:600; margin-bottom:4px; }
       <span class="count" id="snackCountCal"></span>
     </div>
     <div class="macro-grid">
-      <div class="macro-card"><div class="macro-label">Daily Calories</div><div class="macro-value">~1,600</div><div class="macro-target">Wegovy + TTC</div></div>
+      <div class="macro-card"><div class="macro-label">Daily Calories</div><div class="macro-value">~1,600</div><div class="macro-target">Target</div></div>
       <div class="macro-card"><div class="macro-label">Protein</div><div class="macro-value">~125g</div><div class="macro-target">Preserves lean mass</div></div>
       <div class="macro-card"><div class="macro-label">Carbs</div><div class="macro-value">~150g</div><div class="macro-target">All GF sources</div></div>
       <div class="macro-card"><div class="macro-label">Fat</div><div class="macro-value">~55g</div><div class="macro-target">Salmon DHA + olive oil</div></div>
@@ -158,20 +158,20 @@ h1 { font-size:28px; font-weight:600; margin-bottom:4px; }
   </div>
   <div id="guide" class="panel">
     <div class="callout"><h3>This Week's Design Rules</h3><ul>
-      <li><strong>4'11" · 196 lbs · Wegovy · TTC · GF · No shellfish</strong></li>
+      <li><strong>4'11" · 196 lbs · GF · No shellfish</strong></li>
       <li>🐟 <strong>All fresh fish clustered Mon-Wed</strong> (salmon safety)</li>
       <li>🥗 <strong>2 batch dressings only</strong>: Lemon-oregano vinaigrette + Miso-tahini creamy</li>
       <li>🔪 <strong>All shredding + roasting done Sunday</strong> — weekday lunches = true grab-and-go</li>
     </ul></div>
-    <div class="callout"><h3>TTC Guardrails</h3><ul>
-      <li>✅ 3 salmon meals + canned salmon = high DHA</li>
+    <div class="callout"><h3>Protein & Fiber Focus</h3><ul>
+      <li>✅ Chicken, ribeye, and eggs anchor most meals</li>
       <li>✅ Eggs 5x for choline</li>
-      <li>✅ Ribeye Wed = iron + zinc + B12</li>
+      <li>✅ Ribeye = iron + zinc + B12</li>
       <li>✅ Lentils + chickpeas + spinach for folate</li>
-      <li>✅ Kiwi vitamin C boosts iron absorption from ribeye + lentils</li>
+      <li>✅ Kiwi vitamin C boosts iron absorption</li>
       <li>⚠️ Caffeine ≤200 mg/day</li>
     </ul></div>
-    <div class="callout"><h3>Wegovy Tips</h3><ul>
+    <div class="callout"><h3>Eating Tips</h3><ul>
       <li>Protein first, always</li>
       <li>Sip liquids AWAY from meals (30 min before/after)</li>
       <li>Portion small; save the rest</li>
@@ -182,7 +182,7 @@ h1 { font-size:28px; font-weight:600; margin-bottom:4px; }
 </div>
 
 <script>
-document.getElementById('weekSubtitle').textContent = `Week of Aug 12–16, 2026 · GF · High-protein · Anti-inflammatory · TTC-safe · Wegovy-friendly · Last updated ${new Date().toLocaleDateString('en-US',{month:'short',day:'numeric',year:'numeric'})}`;
+document.getElementById('weekSubtitle').textContent = `Week of Aug 12–16, 2026 · GF · High-protein · Anti-inflammatory · Last updated ${new Date().toLocaleDateString('en-US',{month:'short',day:'numeric',year:'numeric'})}`;
 const TODAY = "2026-08-12";
 
 const meals = [
@@ -192,8 +192,8 @@ const meals = [
 {date:"2026-08-13",day:"Thursday",type:"Breakfast",name:"🥤 Mixed Berry Protein Smoothie + Creatine",cal:340,p:33,c:32,f:10,fib:7,time:"5m",recipe:"berry-smoothie"},
 {date:"2026-08-13",day:"Thursday",type:"Snack 1",name:"🥝 Kiwi + Greek Yogurt Bowl",cal:220,p:17,c:26,f:4,fib:6,time:"2m",recipe:"kiwi-yogurt-bowl"},
 {date:"2026-08-13",day:"Thursday",type:"Lunch",name:"🍛 Coconut Curry Chicken Bowl w/ Zucchini (HR kit + chicken)",cal:480,p:40,c:32,f:20,fib:6,time:"13m — makes 2",recipe:"coconut-curry-chicken"},
-{date:"2026-08-13",day:"Thursday",type:"Snack 2",name:"🧀 Parm Crisps + Cashews",cal:180,p:12,c:3,f:14,fib:2,time:"0m batched",recipe:"parm-crisps"},
-{date:"2026-08-13",day:"Thursday",type:"Dinner",name:"🥩 Ribeye + Chimichurri + Sweet Potato + Asparagus",cal:550,p:42,c:22,f:34,fib:6,time:"25m",recipe:"ribeye-chimichurri"},
+{date:"2026-08-13",day:"Thursday",type:"Snack 2",name:"🚫 Skip — banking cal for dinner drink",cal:0,p:0,c:0,f:0,fib:0,time:"—",recipe:"simple-snack"},
+{date:"2026-08-13",day:"Thursday",type:"Dinner",name:"🍔 Burger Master (out) — GF bun Deluxe + 1 drink",cal:720,p:35,c:45,f:34,fib:3,time:"Order out",recipe:"burger-master"},
 {date:"2026-08-14",day:"Friday",type:"Breakfast",name:"🥤 Green Protein Smoothie + Creatine",cal:335,p:32,c:30,f:12,fib:8,time:"5m",recipe:"green-smoothie"},
 {date:"2026-08-14",day:"Friday",type:"Snack 1",name:"🥝 Kiwi + Lentil Bread + Almond Butter",cal:260,p:11,c:32,f:12,fib:10,time:"2m",recipe:"kiwi-lentil-bread"},
 {date:"2026-08-14",day:"Friday",type:"Lunch",name:"🍛 Coconut Curry Chicken leftover",cal:480,p:40,c:32,f:20,fib:6,time:"3m reheat",recipe:"coconut-curry-chicken"},
@@ -240,9 +240,12 @@ const recipes = [
 {id:"salmon-nicoise",name:"🐟 Salmon Nicoise Bowl (mason jar)",time:"5m assembly (IF prep done)",prep:"NEEDS ADVANCE PREP",macros:{cal:455,p:35,c:28,f:20,fib:7},
  ingredients:["4 oz Mon leftover baked salmon","1 pre-hard-boiled egg halved","½ cup pre-roasted sweet potato + asparagus (Mon leftover)","handful mixed greens","¼ cup cherry tomatoes","6 kalamata olives (opt)","2 tbsp Lemon Vinaigrette (Batch #1)"],
  instructions:["Layer in mason jar with vinaigrette at bottom.","Shake before eating."]},
-{id:"ribeye-chimichurri",name:"🥩 Ribeye + Chimichurri + Sweet Potato + Asparagus",time:"25m (+20m ribeye temper)",prep:"Chimichurri can be pre-made Sunday",macros:{cal:550,p:42,c:22,f:34,fib:6},
+{id:"burger-master",name:"🍔 Burger Master — GF Deluxe + 1 drink (eating out)",time:"Order out",macros:{cal:720,p:35,c:45,f:34,fib:3},
+ ingredients:["Order: GF bun Deluxe Burger","Ask for extra lettuce + tomato (skip fries — not GF, shared fryer)","Mustard instead of mayo (saves ~100 cal)","1 drink: 5 oz wine (120 cal) or vodka soda (100 cal) or GF Omission beer (170 cal)"],
+ instructions:["Order the burger FIRST, drink second — protein grounds you.","Skip fries/rings/shakes — all breaded or empty carbs.","If they push a side: side salad, no croutons, olive oil + lemon."],note:"Front-load protein earlier in the day (smoothie AM + curry chicken lunch = 90g P). Skip PM Parm snack to bank cals for the drink."},
+{id:"ribeye-chimichurri",name:"🥩 Ribeye + Chimichurri + Sweet Potato + Asparagus",time:"25m (+20m ribeye temper)",prep:"Chimichurri can be pre-made in advance",macros:{cal:550,p:42,c:22,f:34,fib:6},
  ingredients:["6-8 oz ribeye, room temp 20 min","½ sweet potato diced ½\"","½ bunch asparagus","1 tbsp avocado oil (high-heat sear)","Salt, pepper, garlic powder","Chimichurri (pre-made in fridge)"],
- instructions:["400°F. Roast veg w/ olive oil + salt 20 min.","Pat ribeye VERY dry. Season salt + pepper + garlic.","Cast iron on HIGH until smoking. Add avocado oil.","Sear ribeye 3 min per side to medium-rare (135°F internal).","REST 5 min. Slice against grain. Top w/ chimichurri."],note:"TTC gold: iron + zinc + B12 in one meal."},
+ instructions:["400°F. Roast veg w/ olive oil + salt 20 min.","Pat ribeye VERY dry. Season salt + pepper + garlic.","Cast iron on HIGH until smoking. Add avocado oil.","Sear ribeye 3 min per side to medium-rare (135°F internal).","REST 5 min. Slice against grain. Top w/ chimichurri."],note:"Iron + zinc + B12 powerhouse."},
 {id:"beef-chili",name:"🥩 Beef Chili + Avocado",time:"25m, 6 servings",prep:"Pre-chopped onion + pepper saves time",macros:{cal:470,p:38,c:42,f:16,fib:14},
  ingredients:["1 tbsp olive oil","1 onion + 1 bell pepper diced (pre-chopped)","3 garlic cloves","1 lb ground beef","2 tbsp chili powder + 1 tbsp cumin + 1 tsp paprika + ½ tsp cinnamon","1 tbsp tomato paste","Cooked black beans (pantry — 1½ cups)","1 can kidney beans","1 jar red pasta sauce","1 cup broth","Toppings: avocado + Greek yogurt + cilantro"],
  instructions:["Sauté onion + pepper 5 min. Add garlic 30 sec.","Brown beef 5 min. Add spices + paste 1 min.","Add beans + sauce + broth. Simmer 20 min.","Top with avocado + yogurt + cilantro."]},
@@ -260,7 +263,7 @@ const recipes = [
  instructions:["Mix salmon with yogurt + Dijon + lemon + onion + dill.","Serve over greens with avocado + tomatoes."]},
 {id:"zaatar-chicken-goat",name:"🍗 Za'atar Chicken Legs + Broccoli + Goat Cheese + Quinoa",time:"20m",macros:{cal:490,p:44,c:32,f:20,fib:6},
  ingredients:["6-8 oz pre-shredded chicken leg meat","1 tbsp za'atar + 1 tsp olive oil","2 cups broccoli florets","¾ cup pre-cooked quinoa","1 oz crumbled goat cheese","Lemon"],
- instructions:["Toss chicken w/ za'atar + oil.","Roast broccoli at 425°F 12 min.","Pan-warm chicken 3 min while broccoli finishes.","Plate over quinoa, top w/ goat cheese crumble. Squeeze lemon."],note:"Goat cheese upgrade — tangy, creamy, TTC-safe."},
+ instructions:["Toss chicken w/ za'atar + oil.","Roast broccoli at 425°F 12 min.","Pan-warm chicken 3 min while broccoli finishes.","Plate over quinoa, top w/ goat cheese crumble. Squeeze lemon."],note:"Goat cheese upgrade — tangy, creamy."},
 {id:"paneer-tikka",name:"🇮🇳 Paneer Tikka Masala + Cauliflower Rice (HR kit)",time:"8m",macros:{cal:460,p:30,c:22,f:26,fib:6},
  ingredients:["HR: Tikka Masala Sauce pouch","HR: Organic Riced Cauliflower pouch","Your paneer (~6 oz, cubed)","1 tbsp olive oil","Fresh cilantro (optional)"],
  instructions:["Microwave cauli rice pouch 90 sec (vent corner) — or skillet 2 min w/ 1 tbsp water. Divide to bowls.","Cut paneer into 1-inch cubes. Heat 1 tbsp oil in skillet over medium, sauté paneer 2-3 min until golden.","Empty sauce pouch into pan, heat until warm. Toss with paneer.","Divide over cauli rice, top with chopped cilantro."]},
@@ -478,7 +481,7 @@ function renderToday() {
   const container = document.getElementById('todayView');
 
   if (todayMeals.length === 0) {
-    container.innerHTML = `<div class="today-hero"><h2>No plan for today</h2><div class="today-date">${new Date().toLocaleDateString('en-US',{weekday:'long', month:'long', day:'numeric', year:'numeric'})}</div><div style="margin-top:12px;">This week runs Aug 3–9. Check the Calendar tab.</div></div>`;
+    container.innerHTML = `<div class="today-hero"><h2>No plan for today</h2><div class="today-date">${new Date().toLocaleDateString('en-US',{weekday:'long', month:'long', day:'numeric', year:'numeric'})}</div><div style="margin-top:12px;">This week runs Aug 12–16. Check the Calendar tab.</div></div>`;
     return;
   }
 
