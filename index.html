@@ -1,3 +1,5 @@
+**index.html**
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -87,40 +89,12 @@ h1 { font-size:28px; font-weight:600; margin-bottom:4px; }
 .today-hero .today-totals { font-size:14px; margin-top:8px; opacity:.9; }
 .today-section { background:var(--cp-surface); border:1px solid var(--cp-border); border-radius:16px; padding:20px; margin-bottom:16px; box-shadow:0 0 2px rgba(0,0,0,.12),0 1px 2px rgba(0,0,0,.14); }
 .today-section h3 { font-size:16px; font-weight:600; color:var(--cp-accent); margin-bottom:12px; display:flex; align-items:center; gap:8px; }
-.today-meal { padding:12px; border-radius:10px; background:var(--cp-surface-soft); margin-bottom:8px; transition:background .15s; border-left:3px solid var(--cp-accent); display:flex; gap:12px; align-items:flex-start; }
+.today-meal { padding:12px; border-radius:10px; background:var(--cp-surface-soft); margin-bottom:8px; cursor:pointer; transition:background .15s; border-left:3px solid var(--cp-accent); }
 .today-meal:hover { background:var(--cp-accent-soft); }
-.today-meal.skipped { opacity:.4; background:var(--cp-surface); border-left-color:var(--cp-text-muted); }
-.today-meal.skipped .today-meal-name { text-decoration:line-through; color:var(--cp-text-muted); }
-.today-meal.swapped { border-left-color:var(--cp-warning); background:var(--cp-highlight); }
-.meal-actions { display:flex; gap:6px; margin-top:6px; }
-.action-btn { background:var(--cp-surface-soft); border:1px solid var(--cp-border); color:var(--cp-text-muted); padding:3px 10px; border-radius:8px; cursor:pointer; font-family:inherit; font-size:11px; font-weight:600; text-transform:uppercase; letter-spacing:.5px; }
-.action-btn:hover { background:var(--cp-accent-soft); color:var(--cp-accent); border-color:var(--cp-accent); }
-.action-btn.skip { color:var(--cp-danger); }
-.action-btn.skip:hover { background:rgba(220,38,38,.1); color:var(--cp-danger); border-color:var(--cp-danger); }
-.action-btn.swap { color:var(--cp-warning); }
-.action-btn.swap:hover { background:rgba(245,158,11,.1); color:var(--cp-warning); border-color:var(--cp-warning); }
-.swap-note { font-size:12px; color:var(--cp-warning); margin-top:6px; font-style:italic; }
-.eaten-check { flex-shrink:0; display:flex; flex-direction:column; gap:4px; align-items:center; }
-.eaten-check-row { display:flex; gap:6px; align-items:center; }
-.eaten-check-row label { font-size:10px; font-weight:600; color:var(--cp-text-muted); text-transform:uppercase; letter-spacing:.5px; cursor:pointer; }
-.eaten-check-row input[type="checkbox"] { width:18px; height:18px; accent-color:var(--cp-success); cursor:pointer; }
-.eaten-check-both { display:flex; gap:6px; align-items:center; padding-top:4px; border-top:1px dashed var(--cp-border); }
-.eaten-check-both input[type="checkbox"] { width:16px; height:16px; accent-color:var(--cp-accent); cursor:pointer; }
-.eaten-check-both label { font-size:10px; font-weight:600; color:var(--cp-accent); text-transform:uppercase; letter-spacing:.5px; cursor:pointer; }
-.today-meal-body { flex-grow:1; cursor:pointer; }
 .today-meal-type { font-size:11px; text-transform:uppercase; color:var(--cp-text-muted); letter-spacing:.5px; font-weight:600; }
 .today-meal-name { font-size:15px; font-weight:500; margin:4px 0; }
 .today-meal-meta { font-size:12px; color:var(--cp-text-soft); }
 .today-meal-meta .time { color:var(--cp-success); font-weight:600; }
-.inventory-log { background:var(--cp-surface); border:1px solid var(--cp-border); border-radius:16px; padding:20px; margin-bottom:16px; box-shadow:0 0 2px rgba(0,0,0,.12),0 1px 2px rgba(0,0,0,.14); }
-.inventory-log h3 { color:var(--cp-accent); margin-bottom:12px; font-size:16px; }
-.inventory-item { padding:6px 0; font-size:14px; display:flex; justify-content:space-between; align-items:center; border-bottom:1px solid var(--cp-border); }
-.inventory-item:last-child { border-bottom:none; }
-.inventory-decrement { color:var(--cp-warning); font-size:12px; font-weight:600; }
-.progress-summary { background:var(--cp-highlight); padding:12px 16px; border-radius:10px; margin-bottom:16px; font-size:14px; }
-.progress-summary strong { color:var(--cp-accent); }
-.clear-btn { background:var(--cp-surface-soft); color:var(--cp-text); border:1px solid var(--cp-border); padding:6px 12px; border-radius:8px; cursor:pointer; font-family:inherit; font-size:12px; margin-left:8px; }
-.clear-btn:hover { background:var(--cp-accent-soft); }
 .prep-callout { background:var(--cp-highlight); border-left:4px solid var(--cp-warning); padding:12px 16px; border-radius:10px; margin-top:8px; }
 .prep-callout-title { font-weight:600; font-size:13px; color:var(--cp-text); margin-bottom:6px; }
 .prep-callout ul { padding-left:20px; margin:0; }
@@ -164,11 +138,11 @@ h1 { font-size:28px; font-weight:600; margin-bottom:4px; }
       <span class="count" id="snackCountCal"></span>
     </div>
     <div class="macro-grid">
-      <div class="macro-card"><div class="macro-label">Daily Calories</div><div class="macro-value">~1,600</div><div class="macro-target">Weight-loss target</div></div>
+      <div class="macro-card"><div class="macro-label">Daily Calories</div><div class="macro-value">~1,600</div><div class="macro-target">Wegovy + TTC</div></div>
       <div class="macro-card"><div class="macro-label">Protein</div><div class="macro-value">~125g</div><div class="macro-target">Preserves lean mass</div></div>
       <div class="macro-card"><div class="macro-label">Carbs</div><div class="macro-value">~150g</div><div class="macro-target">All GF sources</div></div>
-      <div class="macro-card"><div class="macro-label">Fat</div><div class="macro-value">~55g</div><div class="macro-target">Salmon omega-3 + olive oil</div></div>
-      <div class="macro-card"><div class="macro-label">Fiber</div><div class="macro-value">≥30g</div><div class="macro-target">Gut + inflammation</div></div>
+      <div class="macro-card"><div class="macro-label">Fat</div><div class="macro-value">~55g</div><div class="macro-target">Salmon DHA + olive oil</div></div>
+      <div class="macro-card"><div class="macro-label">Fiber</div><div class="macro-value">≥30g</div><div class="macro-target">Anti-inflammatory</div></div>
     </div>
     <div class="calendar" id="calendarGrid"></div>
   </div>
@@ -184,71 +158,57 @@ h1 { font-size:28px; font-weight:600; margin-bottom:4px; }
   </div>
   <div id="guide" class="panel">
     <div class="callout"><h3>This Week's Design Rules</h3><ul>
-      <li><strong>GF · No shellfish · High-protein</strong></li>
-      <li>🐟 <strong>All fresh fish clustered Mon-Thu</strong></li>
+      <li><strong>4'11" · 196 lbs · Wegovy · TTC · GF · No shellfish</strong></li>
+      <li>🐟 <strong>All fresh fish clustered Mon-Wed</strong> (salmon safety)</li>
       <li>🥗 <strong>2 batch dressings only</strong>: Lemon-oregano vinaigrette + Miso-tahini creamy</li>
-      <li>🔪 <strong>All shredding + roasting done Sunday</strong> — weekday lunches = grab-and-go</li>
-      <li>🚗 Weekend travel Sat-Sun — pantry-only Sun return dinner</li>
+      <li>🔪 <strong>All shredding + roasting done Sunday</strong> — weekday lunches = true grab-and-go</li>
     </ul></div>
-    <div class="callout"><h3>Nutrition Highlights</h3><ul>
-      <li>✅ 2 salmon meals (fresh) + canned salmon = omega-3s</li>
+    <div class="callout"><h3>TTC Guardrails</h3><ul>
+      <li>✅ 3 salmon meals + canned salmon = high DHA</li>
       <li>✅ Eggs 5x for choline</li>
       <li>✅ Ribeye Wed = iron + zinc + B12</li>
-      <li>✅ Lentils + chickpeas + spinach = folate + iron</li>
-      <li>✅ Kiwi vitamin C boosts iron absorption</li>
-      <li>✅ Turmeric + ginger + berries throughout</li>
+      <li>✅ Lentils + chickpeas + spinach for folate</li>
+      <li>✅ Kiwi vitamin C boosts iron absorption from ribeye + lentils</li>
+      <li>⚠️ Caffeine ≤200 mg/day</li>
     </ul></div>
-    <div class="callout"><h3>Eating Tips</h3><ul>
+    <div class="callout"><h3>Wegovy Tips</h3><ul>
       <li>Protein first, always</li>
       <li>Sip liquids AWAY from meals (30 min before/after)</li>
       <li>Portion small; save the rest</li>
-      <li>Cold foods on rough days (chia pudding, salmon salad)</li>
+      <li>Cold foods on nauseous days</li>
       <li>Ginger tea = anti-inflammatory + settles nausea</li>
     </ul></div>
   </div>
 </div>
 
 <script>
-document.getElementById('weekSubtitle').textContent = `Week of Aug 3–9, 2026 · GF · High-protein · No shellfish · Last updated ${new Date().toLocaleDateString('en-US',{month:'short',day:'numeric',year:'numeric'})}`;
-const TODAY = "2026-08-03";
+document.getElementById('weekSubtitle').textContent = `Week of Aug 12–16, 2026 · GF · High-protein · Anti-inflammatory · TTC-safe · Wegovy-friendly · Last updated ${new Date().toLocaleDateString('en-US',{month:'short',day:'numeric',year:'numeric'})}`;
+const TODAY = "2026-08-12";
 
 const meals = [
-{date:"2026-08-03",day:"Monday",type:"Breakfast",name:"2 Hard-Boiled Eggs (actual)",cal:160,p:13,c:1,f:11,fib:0,time:"1m",recipe:"simple-snack"},
-{date:"2026-08-03",day:"Monday",type:"Snack 1",name:"🥤 Berry Protein Smoothie + Creatine (actual)",cal:340,p:33,c:32,f:10,fib:7,time:"5m",recipe:"berry-smoothie"},
-{date:"2026-08-03",day:"Monday",type:"Lunch",name:"⚠️ Chicken bowl shifted to Tue (jar made)",cal:0,p:0,c:0,f:0,fib:0,time:"—",recipe:"med-chicken-bowl"},
-{date:"2026-08-03",day:"Monday",type:"Snack 2",name:"🧀 Parm Chunk (actual — was apple + AB)",cal:180,p:12,c:3,f:14,fib:2,time:"1m",recipe:"parm-chunk"},
-{date:"2026-08-03",day:"Monday",type:"Dinner",name:"🐟 Sheet Pan Salmon + Asparagus + Sweet Potato",cal:470,p:36,c:32,f:20,fib:7,time:"25m",recipe:"sheet-pan-salmon"},
-{date:"2026-08-04",day:"Tuesday",type:"Breakfast",name:"Greek Yogurt Bowl + Berries + Chia (swap — smoothie used Mon)",cal:180,p:17,c:18,f:4,fib:5,time:"2m",recipe:"greek-yogurt-bowl"},
-{date:"2026-08-04",day:"Tuesday",type:"Snack 1",name:"🥝 Kiwi + Lentil Bread + Almond Butter",cal:260,p:11,c:32,f:12,fib:10,time:"2m",recipe:"kiwi-lentil-bread"},
-{date:"2026-08-04",day:"Tuesday",type:"Lunch",name:"🍗 Chicken Bowl (Mon jar — grab-and-go!)",cal:465,p:42,c:38,f:16,fib:8,time:"0m ready",recipe:"med-chicken-bowl"},
-{date:"2026-08-04",day:"Tuesday",type:"Snack 2",name:"2 Hard-Boiled Eggs",cal:160,p:13,c:1,f:11,fib:0,time:"0m",recipe:"simple-snack"},
-{date:"2026-08-04",day:"Tuesday",type:"Dinner",name:"🥩 Beef Chili + Avocado (USES 4-DAY BLACK BEANS!)",cal:470,p:38,c:42,f:16,fib:14,time:"25m",recipe:"beef-chili"},
-{date:"2026-08-04",day:"Tuesday",type:"Extra",name:"🥛 Nurri Chocolate Milk (added)",cal:150,p:30,c:5,f:2,fib:0,time:"1m",recipe:"nurri"},
-{date:"2026-08-05",day:"Wednesday",type:"Breakfast",name:"🍳 Spinach Feta CC Egg Bake + Lentil Bread",cal:455,p:37,c:28,f:25,fib:6,time:"1m reheat",recipe:"egg-bake"},
-{date:"2026-08-05",day:"Wednesday",type:"Snack 1",name:"🥝 Kiwi + Greek Yogurt Bowl",cal:220,p:17,c:26,f:4,fib:6,time:"2m",recipe:"kiwi-yogurt-bowl"},
-{date:"2026-08-05",day:"Wednesday",type:"Lunch",name:"🐟 Salmon Nicoise Bowl (Mon leftover)",cal:455,p:35,c:28,f:20,fib:7,time:"0m ready",recipe:"salmon-nicoise"},
-{date:"2026-08-05",day:"Wednesday",type:"Snack 2",name:"🧀 Parm Crisps + Almonds",cal:180,p:12,c:3,f:14,fib:2,time:"0m batched",recipe:"parm-crisps"},
-{date:"2026-08-05",day:"Wednesday",type:"Dinner",name:"⚡ Ginger Salmon Rice Bowl (LAST FRESH FISH)",cal:470,p:38,c:45,f:14,fib:5,time:"15m",recipe:"ginger-salmon"},
-{date:"2026-08-06",day:"Thursday",type:"Breakfast",name:"Chia Pudding + Berries + Walnuts",cal:320,p:15,c:32,f:16,fib:10,time:"0m ready",recipe:"chia-pudding"},
-{date:"2026-08-06",day:"Thursday",type:"Snack 1",name:"Greek Yogurt + Blueberries + Chia",cal:180,p:17,c:18,f:4,fib:5,time:"2m",recipe:"greek-yogurt-bowl"},
-{date:"2026-08-06",day:"Thursday",type:"Lunch",name:"🍲 Lentil & GF Sausage Soup",cal:435,p:32,c:42,f:12,fib:12,time:"3m reheat",recipe:"lentil-soup"},
-{date:"2026-08-06",day:"Thursday",type:"Snack 2",name:"Edamame w/ Sea Salt",cal:190,p:18,c:15,f:8,fib:8,time:"3m",recipe:"simple-snack"},
-{date:"2026-08-06",day:"Thursday",type:"Dinner",name:"🥩 Ribeye + Chimichurri + Sweet Potato + Asparagus",cal:550,p:42,c:22,f:34,fib:6,time:"25m",recipe:"ribeye-chimichurri"},
-{date:"2026-08-07",day:"Friday",type:"Breakfast",name:"🥤 Green Protein Smoothie + Creatine",cal:335,p:32,c:30,f:12,fib:8,time:"5m",recipe:"green-smoothie"},
-{date:"2026-08-07",day:"Friday",type:"Snack 1",name:"Lentil Bread + Almond Butter",cal:240,p:11,c:22,f:12,fib:7,time:"1m",recipe:"lentil-bread-ab"},
-{date:"2026-08-07",day:"Friday",type:"Lunch",name:"🥩 Beef Chili leftover",cal:470,p:38,c:42,f:16,fib:14,time:"3m reheat",recipe:"beef-chili"},
-{date:"2026-08-07",day:"Friday",type:"Snack 2",name:"Apple + Almond Butter",cal:180,p:5,c:22,f:10,fib:5,time:"1m",recipe:"simple-snack"},
-{date:"2026-08-07",day:"Friday",type:"Dinner",name:"⚡ Za'atar Chicken + Broccoli + Quinoa (fast, then PACK)",cal:440,p:40,c:32,f:16,fib:6,time:"20m",recipe:"zaatar-chicken"},
-{date:"2026-08-08",day:"Saturday",type:"Breakfast",name:"🚗 TRAVEL: Smoothie to-go or lentil bread + AB",cal:340,p:20,c:35,f:14,fib:8,time:"pre-made",recipe:"travel-snacks"},
-{date:"2026-08-08",day:"Saturday",type:"Snack 1",name:"🚗 Parm chunks + almonds baggie",cal:180,p:12,c:3,f:14,fib:2,time:"—",recipe:"travel-snacks"},
-{date:"2026-08-08",day:"Saturday",type:"Lunch",name:"🚗 OUT — eating out / travel food",cal:0,p:0,c:0,f:0,fib:0,time:"—",recipe:"travel-snacks"},
-{date:"2026-08-08",day:"Saturday",type:"Snack 2",name:"🚗 Apple + AB pouch",cal:180,p:5,c:22,f:10,fib:5,time:"—",recipe:"travel-snacks"},
-{date:"2026-08-08",day:"Saturday",type:"Dinner",name:"🚗 OUT — eating out",cal:0,p:0,c:0,f:0,fib:0,time:"—",recipe:"travel-snacks"},
-{date:"2026-08-09",day:"Sunday",type:"Breakfast",name:"🚗 TRAVEL: smoothie or hard-boiled eggs from cooler",cal:200,p:15,c:15,f:8,fib:3,time:"—",recipe:"travel-snacks"},
-{date:"2026-08-09",day:"Sunday",type:"Snack 1",name:"🚗 Lentil bread + AB or hummus + veg",cal:240,p:11,c:22,f:12,fib:7,time:"—",recipe:"travel-snacks"},
-{date:"2026-08-09",day:"Sunday",type:"Lunch",name:"🚗 OUT — eating out / travel food",cal:0,p:0,c:0,f:0,fib:0,time:"—",recipe:"travel-snacks"},
-{date:"2026-08-09",day:"Sunday",type:"Snack 2",name:"🚗 Almonds + apple",cal:180,p:5,c:22,f:10,fib:5,time:"—",recipe:"travel-snacks"},
-{date:"2026-08-09",day:"Sunday",type:"Dinner",name:"⚡ Return-Home Pantry Bowl (5 min)",cal:420,p:28,c:35,f:18,fib:10,time:"5m",recipe:"return-home-bowl"}
+{date:"2026-08-12",day:"Wednesday",type:"Breakfast",name:"1 Hard-Boiled Egg (actual)",cal:80,p:6,c:1,f:5,fib:0,time:"—",recipe:"simple-snack"},
+{date:"2026-08-12",day:"Wednesday",type:"Lunch",name:"🥩 Beef Chili + Tortilla Española + Broccoli (actual)",cal:630,p:40,c:45,f:28,fib:10,time:"—",recipe:"beef-chili"},
+{date:"2026-08-12",day:"Wednesday",type:"Dinner",name:"🇮🇳 Paneer Tikka Masala + Cauliflower Rice (HR kit)",cal:460,p:30,c:22,f:26,fib:6,time:"8m",recipe:"paneer-tikka"},
+{date:"2026-08-13",day:"Thursday",type:"Breakfast",name:"🥤 Mixed Berry Protein Smoothie + Creatine",cal:340,p:33,c:32,f:10,fib:7,time:"5m",recipe:"berry-smoothie"},
+{date:"2026-08-13",day:"Thursday",type:"Snack 1",name:"🥝 Kiwi + Greek Yogurt Bowl",cal:220,p:17,c:26,f:4,fib:6,time:"2m",recipe:"kiwi-yogurt-bowl"},
+{date:"2026-08-13",day:"Thursday",type:"Lunch",name:"🍛 Coconut Curry Chicken Bowl w/ Zucchini (HR kit + chicken)",cal:480,p:40,c:32,f:20,fib:6,time:"13m — makes 2",recipe:"coconut-curry-chicken"},
+{date:"2026-08-13",day:"Thursday",type:"Snack 2",name:"🧀 Parm Crisps + Cashews",cal:180,p:12,c:3,f:14,fib:2,time:"0m batched",recipe:"parm-crisps"},
+{date:"2026-08-13",day:"Thursday",type:"Dinner",name:"🥩 Ribeye + Chimichurri + Sweet Potato + Asparagus",cal:550,p:42,c:22,f:34,fib:6,time:"25m",recipe:"ribeye-chimichurri"},
+{date:"2026-08-14",day:"Friday",type:"Breakfast",name:"🥤 Green Protein Smoothie + Creatine",cal:335,p:32,c:30,f:12,fib:8,time:"5m",recipe:"green-smoothie"},
+{date:"2026-08-14",day:"Friday",type:"Snack 1",name:"🥝 Kiwi + Lentil Bread + Almond Butter",cal:260,p:11,c:32,f:12,fib:10,time:"2m",recipe:"kiwi-lentil-bread"},
+{date:"2026-08-14",day:"Friday",type:"Lunch",name:"🍛 Coconut Curry Chicken leftover",cal:480,p:40,c:32,f:20,fib:6,time:"3m reheat",recipe:"coconut-curry-chicken"},
+{date:"2026-08-14",day:"Friday",type:"Snack 2",name:"2 Hard-Boiled Eggs",cal:160,p:13,c:1,f:11,fib:0,time:"0m",recipe:"simple-snack"},
+{date:"2026-08-14",day:"Friday",type:"Dinner",name:"🥩 Beef Chili + Avocado (batch 6 servings)",cal:470,p:38,c:42,f:16,fib:14,time:"25m",recipe:"beef-chili"},
+{date:"2026-08-15",day:"Saturday",type:"Breakfast",name:"🍳 Spinach Feta CC Egg Bake + Mixed Berries",cal:380,p:29,c:18,f:22,fib:4,time:"1m reheat",recipe:"egg-bake"},
+{date:"2026-08-15",day:"Saturday",type:"Snack 1",name:"Hummus + Cucumber + Bell Pepper",cal:170,p:7,c:18,f:8,fib:5,time:"2m",recipe:"simple-snack"},
+{date:"2026-08-15",day:"Saturday",type:"Lunch",name:"🥩 Beef Chili leftover + Avocado",cal:470,p:38,c:42,f:16,fib:14,time:"3m reheat",recipe:"beef-chili"},
+{date:"2026-08-15",day:"Saturday",type:"Snack 2",name:"🥝 Kiwi + Cashews",cal:200,p:5,c:22,f:12,fib:4,time:"1m",recipe:"simple-snack"},
+{date:"2026-08-15",day:"Saturday",type:"Dinner",name:"🍗 Za'atar Chicken + Broccoli + Goat Cheese + Quinoa",cal:490,p:44,c:32,f:20,fib:6,time:"20m",recipe:"zaatar-chicken-goat"},
+{date:"2026-08-16",day:"Sunday",type:"Breakfast",name:"GF Mixed Berry Almond Overnight Oats",cal:340,p:22,c:42,f:10,fib:8,time:"0m ready",recipe:"gf-overnight-oats"},
+{date:"2026-08-16",day:"Sunday",type:"Snack 1",name:"🥝 Kiwi + Greek Yogurt Bowl",cal:220,p:17,c:26,f:4,fib:6,time:"2m",recipe:"kiwi-yogurt-bowl"},
+{date:"2026-08-16",day:"Sunday",type:"Lunch",name:"🍳 Egg Bake Slice + Mixed Greens + Cherry Tomatoes",cal:400,p:30,c:12,f:24,fib:4,time:"3m",recipe:"egg-bake"},
+{date:"2026-08-16",day:"Sunday",type:"Snack 2",name:"Lentil Bread + Almond Butter",cal:240,p:11,c:22,f:12,fib:7,time:"1m",recipe:"lentil-bread-ab"},
+{date:"2026-08-16",day:"Sunday",type:"Dinner",name:"🍗 Herb Roasted Chicken Thighs + Brussels + Sweet Potato",cal:485,p:42,c:35,f:18,fib:8,time:"45m hands-off",recipe:"roasted-thighs"}
 ];
 
 const recipes = [
@@ -256,8 +216,8 @@ const recipes = [
  ingredients:["¾ cup pre-cooked quinoa","5 oz pre-shredded chicken leg meat","½ cup pre-roasted sweet potato","½ cup cherry tomatoes","¼ avocado (add day-of)","handful baby spinach","2 tbsp Lemon Vinaigrette (Batch #1)"],
  instructions:["Layer in mason jar: vinaigrette bottom, quinoa, chicken, sweet potato, tomatoes, spinach on top.","Cap. Add avocado morning-of.","Grab and go."],
  note:"⚠️ NEEDS 4 prep-ahead components: cooked quinoa, shredded chicken, roasted sweet potato, batch dressing. Without these, meal takes 45+ min."},
-{id:"berry-smoothie",name:"🥤 Berry Protein Smoothie + Creatine",time:"5m",macros:{cal:340,p:33,c:32,f:10,fib:7},
- ingredients:["1 scoop Ritual protein powder","5g creatine","1 cup almond milk","½ cup frozen blueberries","½ frozen banana","1 handful spinach","1 tbsp almond butter","1 tbsp flax","Ice"],
+{id:"berry-smoothie",name:"🥤 Mixed Berry Protein Smoothie + Creatine",time:"5m",macros:{cal:340,p:33,c:32,f:10,fib:7},
+ ingredients:["1 scoop Ritual protein powder","5g creatine","1 cup almond milk","½ cup frozen mixed berries","½ frozen banana","1 handful spinach","1 tbsp almond butter","1 tbsp flax","Ice"],
  instructions:["Blend 30-45 sec until smooth."]},
 {id:"green-smoothie",name:"🥤 Green Protein Smoothie + Creatine",time:"5m",macros:{cal:335,p:32,c:30,f:12,fib:8},
  ingredients:["1 scoop Ritual protein","5g creatine","1 cup almond milk","½ frozen banana","1 cup spinach + ½ cup frozen kale","½ avocado","1 tsp fresh ginger","1 tbsp hemp seeds","Ice"],
@@ -282,7 +242,7 @@ const recipes = [
  instructions:["Layer in mason jar with vinaigrette at bottom.","Shake before eating."]},
 {id:"ribeye-chimichurri",name:"🥩 Ribeye + Chimichurri + Sweet Potato + Asparagus",time:"25m (+20m ribeye temper)",prep:"Chimichurri can be pre-made Sunday",macros:{cal:550,p:42,c:22,f:34,fib:6},
  ingredients:["6-8 oz ribeye, room temp 20 min","½ sweet potato diced ½\"","½ bunch asparagus","1 tbsp avocado oil (high-heat sear)","Salt, pepper, garlic powder","Chimichurri (pre-made in fridge)"],
- instructions:["400°F. Roast veg w/ olive oil + salt 20 min.","Pat ribeye VERY dry. Season salt + pepper + garlic.","Cast iron on HIGH until smoking. Add avocado oil.","Sear ribeye 3 min per side to medium-rare (135°F internal).","REST 5 min. Slice against grain. Top w/ chimichurri."],note:"Iron + zinc + B12 powerhouse in one meal."},
+ instructions:["400°F. Roast veg w/ olive oil + salt 20 min.","Pat ribeye VERY dry. Season salt + pepper + garlic.","Cast iron on HIGH until smoking. Add avocado oil.","Sear ribeye 3 min per side to medium-rare (135°F internal).","REST 5 min. Slice against grain. Top w/ chimichurri."],note:"TTC gold: iron + zinc + B12 in one meal."},
 {id:"beef-chili",name:"🥩 Beef Chili + Avocado",time:"25m, 6 servings",prep:"Pre-chopped onion + pepper saves time",macros:{cal:470,p:38,c:42,f:16,fib:14},
  ingredients:["1 tbsp olive oil","1 onion + 1 bell pepper diced (pre-chopped)","3 garlic cloves","1 lb ground beef","2 tbsp chili powder + 1 tbsp cumin + 1 tsp paprika + ½ tsp cinnamon","1 tbsp tomato paste","Cooked black beans (pantry — 1½ cups)","1 can kidney beans","1 jar red pasta sauce","1 cup broth","Toppings: avocado + Greek yogurt + cilantro"],
  instructions:["Sauté onion + pepper 5 min. Add garlic 30 sec.","Brown beef 5 min. Add spices + paste 1 min.","Add beans + sauce + broth. Simmer 20 min.","Top with avocado + yogurt + cilantro."]},
@@ -298,12 +258,18 @@ const recipes = [
 {id:"salmon-salad",name:"🐟 Salmon Salad on Mixed Greens",time:"8m",macros:{cal:415,p:32,c:18,f:22,fib:6},
  ingredients:["1 can (5 oz) wild salmon","1 tbsp Greek yogurt","1 tsp Dijon + 1 tsp lemon","1 tbsp red onion + 1 tbsp dill","2 cups mixed greens","¼ avocado","½ cup cherry tomatoes"],
  instructions:["Mix salmon with yogurt + Dijon + lemon + onion + dill.","Serve over greens with avocado + tomatoes."]},
-{id:"zaatar-chicken",name:"🍗 Za'atar Chicken Legs + Roasted Broccoli + Quinoa",time:"20m",macros:{cal:440,p:40,c:32,f:16,fib:6},
- ingredients:["6-8 oz pre-shredded chicken leg meat","1 tbsp za'atar + 1 tsp olive oil","2 cups broccoli florets","¾ cup pre-cooked quinoa","Lemon"],
- instructions:["Toss chicken w/ za'atar + oil.","Roast broccoli at 425°F 12 min.","Pan-warm chicken 3 min while broccoli finishes.","Plate over quinoa. Squeeze lemon."],note:"Cod swap: cod wasn't available at store."},
-{id:"gf-overnight-oats",name:"GF Berry Almond Overnight Oats",time:"5m prep + overnight",prep:"Batch Sun for Mon/Sun/Thu",macros:{cal:340,p:22,c:42,f:10,fib:8},
- ingredients:["½ cup GF rolled oats","¾ cup almond milk","½ cup Greek yogurt","1 tbsp chia + 1 tbsp flax","½ cup berries","1 tbsp walnuts (AM)","cinnamon + vanilla"],
- instructions:["Combine except walnuts in mason jar.","Refrigerate overnight. Top w/ walnuts AM."]},
+{id:"zaatar-chicken-goat",name:"🍗 Za'atar Chicken Legs + Broccoli + Goat Cheese + Quinoa",time:"20m",macros:{cal:490,p:44,c:32,f:20,fib:6},
+ ingredients:["6-8 oz pre-shredded chicken leg meat","1 tbsp za'atar + 1 tsp olive oil","2 cups broccoli florets","¾ cup pre-cooked quinoa","1 oz crumbled goat cheese","Lemon"],
+ instructions:["Toss chicken w/ za'atar + oil.","Roast broccoli at 425°F 12 min.","Pan-warm chicken 3 min while broccoli finishes.","Plate over quinoa, top w/ goat cheese crumble. Squeeze lemon."],note:"Goat cheese upgrade — tangy, creamy, TTC-safe."},
+{id:"paneer-tikka",name:"🇮🇳 Paneer Tikka Masala + Cauliflower Rice (HR kit)",time:"8m",macros:{cal:460,p:30,c:22,f:26,fib:6},
+ ingredients:["HR: Tikka Masala Sauce pouch","HR: Organic Riced Cauliflower pouch","Your paneer (~6 oz, cubed)","1 tbsp olive oil","Fresh cilantro (optional)"],
+ instructions:["Microwave cauli rice pouch 90 sec (vent corner) — or skillet 2 min w/ 1 tbsp water. Divide to bowls.","Cut paneer into 1-inch cubes. Heat 1 tbsp oil in skillet over medium, sauté paneer 2-3 min until golden.","Empty sauce pouch into pan, heat until warm. Toss with paneer.","Divide over cauli rice, top with chopped cilantro."]},
+{id:"coconut-curry-chicken",name:"🍛 Coconut Curry Chicken Bowl w/ Zucchini (HR kit + chicken swap)",time:"13m, 2 servings",prep:"Uses HR curry sauce + fresh zucchini + shredded chicken instead of salmon",macros:{cal:480,p:40,c:32,f:20,fib:6},
+ ingredients:["HR: Coconut Curry Sauce pouch","HR: Fresh Zucchini (1 medium)","8-10 oz pre-shredded chicken leg meat","1 tbsp olive oil","¾ cup pre-cooked quinoa or rice per bowl","Salt + pepper"],
+ instructions:["Slice zucchini into ¼\" rounds. Heat 1 tsp oil in skillet med-high, season w/ salt/pep, sauté 3-4 min until tender.","Warm shredded chicken 2 min w/ 1 tsp oil.","Drizzle 2-4 tbsp coconut curry sauce into each bowl base, spread flat.","Layer: quinoa/rice → chicken → zucchini → drizzle more sauce on top.","Salmon swap: HR recipe calls for salmon but we're using freezer chicken. Cal/protein comparable."]},
+{id:"gf-overnight-oats",name:"GF Mixed Berry Almond Overnight Oats",time:"5m prep + overnight",prep:"Make Sat night for Sun",macros:{cal:340,p:22,c:42,f:10,fib:8},
+ ingredients:["½ cup GF rolled oats","¾ cup almond milk","½ cup Greek yogurt","1 tbsp chia + 1 tbsp flax","½ cup frozen mixed berries (thaw overnight in jar)","1 tbsp walnuts or cashews (AM)","cinnamon + vanilla"],
+ instructions:["Combine except nuts in mason jar.","Refrigerate overnight. Top w/ nuts AM."]},
 {id:"roasted-thighs",name:"🍗 Herb Roasted Chicken Thighs + Brussels + Sweet Potato",time:"45m hands-off, 4 servings",prep:"Extra chicken → next week bowls",macros:{cal:485,p:42,c:35,f:18,fib:8},
  ingredients:["4 bone-in skin-on chicken thighs","1.5 lbs Brussels halved","2 sweet potatoes diced","3 tbsp olive oil","1 tsp za'atar + garlic powder + salt + pepper","1 lemon"],
  instructions:["425°F. Toss veg w/ 2 tbsp oil + salt.","Rub chicken w/ oil + spices.","Roast 35-40 min until 175°F.","Lemon squeeze."]},
@@ -320,21 +286,8 @@ const recipes = [
  ingredients:["1 oz Parmigiano-Reggiano chunk","15 almonds"],
  instructions:["Break Parm, serve w/ almonds."]},
 {id:"simple-snack",name:"Simple snacks (rotation)",time:"1-3m",macros:{cal:170,p:10,c:15,f:9,fib:4},
- ingredients:["Apple + 1 tbsp almond butter","2 hard-boiled eggs + everything seasoning","Hummus + cucumber + bell pepper","1 cup shelled edamame + sea salt"],
- instructions:["Pick one."]},
-{id:"nurri",name:"🥛 Nurri Chocolate Milk (RTD)",time:"grab-and-go",macros:{cal:150,p:30,c:5,f:2,fib:0},
- ingredients:["1 Nurri Chocolate Milk bottle","(Store-bought, GF, TTC-safe protein drink)"],
- instructions:["Shake. Drink cold."],note:"Great emergency protein — 30g P for 150 cal is Wegovy gold."},
-{id:"lentil-bread-bake",name:"🍞 Homemade Red Lentil Bread (batch bake)",time:"2-4h soak + 45m bake, yields 6-8 slices",prep:"BATCH — bake weekly",macros:{cal:130,p:9,c:20,f:3,fib:6},
- ingredients:["1 cup red lentils, dry","½ cup water","2 large eggs","2 tbsp olive oil","1 tsp baking powder","½ tsp salt","Optional: 1 tsp dried herbs (rosemary/thyme), garlic powder, sesame/pumpkin seeds on top"],
- instructions:["Soak lentils in cold water 2-4 hours. Drain + rinse.","Preheat oven to 350°F. Grease a small loaf pan (9×5 or similar).","Blend everything smooth in high-speed blender or food processor (30-60 sec).","Pour batter into loaf pan. Optional: sprinkle seeds on top.","Bake 40-45 min until top is golden brown and firm when pressed.","Cool COMPLETELY on rack before slicing (30+ min — cuts cleanly cold).","Slice into ~6-8 pieces. Store in fridge 5 days or freezer 2 months."],
- note:"Per slice: ~130 cal, 9g P, 6g fiber, naturally GF, high folate + iron."},
-{id:"travel-snacks",name:"🚗 Weekend Travel Snacks",time:"Pack Fri night",prep:"Pack cooler + dry bag Fri PM",macros:{cal:170,p:10,c:18,f:9,fib:5},
- ingredients:["Cooler bag:","- 4 hard-boiled eggs (in shell)","- Hummus + carrots/peppers in container","- Greek yogurt cups","- Pre-made smoothie in insulated bottle (Sat AM)","Dry bag:","- Lentil bread slices in ziploc","- Individual almond butter packets (RxBar, Justin's)","- 2 apples","- Parm crisps in ziploc","- Baggies of raw almonds","- 4 hard-boiled eggs (day 1 only)","- Green tea bags","- Water"],
- instructions:["Fri night pack cooler + dry bag.","Grab-and-go Sat AM.","Eat out for lunch + dinner as planned.","Sun: eat remaining snacks on drive home."],note:"NO fresh salmon, egg bake, or salad for weekend — those got eaten Mon-Thu."},
-{id:"return-home-bowl",name:"⚡ Return-Home Pantry Bowl (Sun 8pm)",time:"5m — 100% pantry",prep:"NONE — pure pantry",macros:{cal:420,p:28,c:35,f:18,fib:10},
- ingredients:["1 can refried beans (pantry)","¼ cup shredded cheddar or mozzarella","¼ cup salsa","¼ avocado (if still good — otherwise skip)","Handful rice crackers or 1 microwave rice pouch","Optional: 1 fried egg on top for extra protein","Salt, cumin, chili powder"],
- instructions:["Microwave refried beans 90 sec.","Warm rice pouch or grab rice crackers.","Layer bowl: rice/crackers → beans → cheese → salsa → avocado.","Optional: fry an egg in 3 min for 200 extra cal + 6g P.","Eat. Sleep."],note:"Zero fresh ingredients required. Everything shelf-stable or freezer. Alternate: microwave a chili leftover from freezer if you froze extras."}
+ ingredients:["Apple + 1 tbsp almond butter","2 hard-boiled eggs + everything seasoning","Hummus + cucumber + bell pepper","1 slice lentil bread + 2 oz lox + bell pepper strips"],
+ instructions:["Pick one."]}
 ];
 
 // Dressings
@@ -348,38 +301,22 @@ const dressings = [
 ];
 
 const grocery = {
-"🏪 Costco (~$40)": {
-  "Produce": ["Frozen wild blueberries — 3 lb bag","Strawberries — 2 lb clamshell","Baby spinach — 1 lb","Spring mix — 1 lb","Sweet potatoes — 5 lb bag","Broccoli florets — 4 lb bag","Brussels sprouts — 2 lb bag","Asparagus — 2 lb bunch","Bell peppers — 6-pack","Cherry tomatoes — 2 lb clamshell","Avocados — 6-count","Honeycrisp apples — 5 lb bag"],
-  "Proteins & Frozen": ["Wild salmon fillets — 1 lb frozen","Eggs — 24 count"],
-  "Dairy": ["2% Greek yogurt — 32 oz","Parmigiano-Reggiano wedge — 24 oz"],
-  "Pantry": ["Raw almonds — 3 lb bag","Walnuts — 3 lb bag","Hummus — 32 oz tub"]
+"🛒 Trader Joe's / Regular grocery (~$20)": {
+  "Produce": ["Fresh spinach — 16 oz bag","Avocados × 2","Mixed greens — 5 oz","Bell peppers × 2","Cucumber × 1","Brussels sprouts — 1 lb","Fresh parsley + cilantro (chimichurri)","Lemons × 3"],
+  "Dairy / Eggs": ["Eggs — 1 dozen"]
 },
-"🌟 Trader Joe's (~$20)": {
-  "Produce/Herbs": ["Frozen bananas — 1 bag","Fresh parsley — 2 bunches","Fresh dill — 1 bunch","Cilantro — 1 bunch","Green onions — 1 bunch"],
-  "Proteins & Frozen": ["Cod fillets — 1 lb ❌ SKIPPED (unavailable — using extra chicken instead)","GF chicken sausage (Aidells)"],
-  "Dairy": ["Good Culture cottage cheese — 16 oz","Feta cheese block — 6 oz"]
-},
-"🛒 Regular grocery (~$15)": {
-  "Produce": ["English cucumbers — 2","Zucchini — 2","Yellow onions — 2","Red onion — 1","Garlic — 1 head","Fresh ginger — 1 knob","Lemons — 4","Raspberries — 1 pint","🥝 Kiwis — 2"],
-  "Proteins": ["Bone-in chicken thighs — 2 lb"],
-  "Dairy": ["Unsweetened almond milk — ½ gallon","Unsalted butter — 1 stick"],
-  "Pantry": ["Canned chickpeas — 1 can"]
-},
-"✅ Already in pantry (skip)": {
-  "Freezer": ["Ribeye × 4","Ground beef × 4 lbs","Chicken legs × 29","Turkey bacon 1 lb"],
-  "Grains": ["GF oats · Quinoa · Basmati rice · Red/green lentils · Moong beans · GF pasta × 3 · Instant rice × 2 · GF pancake mix · Rice crackers"],
-  "Canned/jarred": ["Cooked black beans (⚠️ USE THIS WEEK) · 1 chickpeas · 1 kidney · 1 black · 4 refried · 4 canned soups · 2 pumpkin puree · Veg broth · 2 pasta sauces · Enchilada sauce"],
-  "Sauces/oils": ["Olive/avocado/sesame oil · Red wine vinegar · Tamari · Coconut aminos · MISO PASTE ✅ · Peanut sauce · Peanut butter · Almond butter"],
-  "Spices/nuts/seeds": ["All spices ✅ · Saffron ✅ · Chia · Flax · Fresh mint ✅"],
-  "Dairy": ["Cheddar · Mozzarella"],
-  "Fridge extras": ["Lox · 2 kiwis ✅"],
-  "Supplements": ["Ritual protein · Creatine · Prenatal"]
+"✅ Already in pantry / fridge / freezer (skip)": {
+  "🥬 Fresh produce on hand": ["🥝 6-7 kiwis (heavy rotation this week)","Cherry tomatoes","Sweet potatoes","Broccoli (raw + tub of cooked)","3 serrano peppers","3 peaches, 2 apples","Asparagus (raw)","Bell pepper (some already)"],
+  "❄️ Freezer": ["Ribeye × 3","Ground beef × 3 lbs","Grilled chicken legs × 23","Turkey bacon 1 lb","Frozen bananas (ton)","Frozen mixed berries (ton — swap for blueberries)"],
+  "🧊 Fridge": ["Paneer ✅ (Wed dinner)","Cottage cheese ✅ (egg bake)","Greek yogurt (32 oz)","Goat cheese ✅ (Sat dinner)","Cheddar · Mozzarella · Feta · Parmesan (tons)","Lox","Almond milk","Hummus"],
+  "📦 HR delivery kits": ["Coconut Curry Sauce (Thu lunch)","Fresh Zucchini (Thu lunch)","Tikka Masala Sauce (Wed dinner)","Organic Riced Cauliflower (Wed dinner)","Cauli linguine + vodka sauce + broccoli florets = ✅ EATEN Tue night"],
+  "🥫 Pantry": ["GF oats · Quinoa · Basmati · Red/green lentils · Moong beans · GF pasta × 3 · Instant rice · GF pancake mix · Rice crackers","Cooked black beans ✅ · chickpeas · kidney · red pasta sauce · enchilada sauce · pumpkin puree · veg broth","Olive/avocado/sesame oil · Miso paste ✅ · Peanut sauce · Peanut butter · Almond butter · Tahini · Tamari","Chia · Flax · Almonds ✅ · Cashews ✅ · All spices ✅ · Saffron ✅ · Mint ✅"],
+  "💊 Supplements": ["Ritual protein · Creatine · Prenatal"]
 }
 };
 
 const prepSteps = [
-{time:"0:00",title:"🍞 Lentil bread — START HERE (needs soak time)",items:["Soak 1 cup red lentils in water 2-4 hours (do this FIRST — will run in background)","After soak: blend soaked lentils + ½ cup water + 2 eggs + 2 tbsp olive oil + 1 tsp baking powder + ½ tsp salt","Pour into greased loaf pan","Bake 350°F for 40-45 min until golden","Cool completely before slicing","Yields ~6-8 slices — covers Mon/Tue/Wed/Fri/Sat needs"]},
-{time:"0:00 (parallel)",title:"Preheat & set up",items:["Preheat oven to 375°F for egg bake","Fill pot for 6 hard-boiled eggs → boil","Set up quinoa: 1 cup dry + 2 cups water in rice cooker"]},
+{time:"0:00",title:"Preheat & set up",items:["Preheat oven to 375°F for egg bake","Fill pot for 6 hard-boiled eggs → boil","Set up quinoa: 1 cup dry + 2 cups water in rice cooker"]},
 {time:"0:05",title:"🍳 Egg bake — batch 4 servings",items:["Wilt 4 cups spinach 1 min in dry pan, squeeze water","Blend ¾ cup cottage cheese SMOOTH","Whisk cottage cheese + 8 eggs + garlic powder + salt + pepper + turmeric","Fold in spinach + ½ cup feta + 2 green onions","Pour into greased 8×8 dish, bake 30-35 min"]},
 {time:"0:15",title:"🌾 Overnight oats — batch 3 jars",items:["Per jar: ½ cup GF oats + ¾ cup almond milk + ½ cup yogurt + 1 tbsp chia + 1 tbsp flax + cinnamon + vanilla","Refrigerate — add berries + walnuts each morning"]},
 {time:"0:20",title:"🍲 Lentil soup — batch 4 servings",items:["Sauté 1 chopped onion + 3 garlic + 2 GF sausages","Add 1 cup lentils + 1 can tomatoes + 4 cups broth + spices","Simmer 25 min. Add kale last 3 min. Portion into 4 containers."]},
@@ -508,7 +445,7 @@ renderCalendar();
 renderRecipes();
 renderGrocery();
 renderPrep();
-// renderToday called at end after prepAhead is defined
+renderToday();
 
 function getTodayISO() {
   // Get YYYY-MM-DD in the user's local timezone
@@ -519,116 +456,15 @@ function getTodayISO() {
   return `${y}-${m}-${dd}`;
 }
 
-// Which inventory items each meal consumes
-const mealConsumes = {
-  "med-chicken-bowl": ["Chicken leg meat (mom's) 5 oz","Cooked quinoa ¾ cup","Roasted sweet potato ½ cup"],
-  "lentil-bread-bake": ["Red lentils 1 cup dry","Eggs 2","Baking powder"],
-  "berry-smoothie": ["Ritual protein 1 scoop","Frozen banana half","Frozen blueberries ½ cup"],
-  "green-smoothie": ["Ritual protein 1 scoop","Frozen banana half","Avocado half"],
-  "kiwi-lentil-bread": ["Kiwi 1","Lentil bread 1 slice","Almond butter 1 tbsp"],
-  "kiwi-yogurt-bowl": ["Kiwi 1","Greek yogurt ¾ cup"],
-  "sheet-pan-salmon": ["Salmon fillets 2","Sweet potato 1","Asparagus 1 bunch"],
-  "salmon-nicoise": ["Salmon leftover 4 oz","Hard-boiled egg 1"],
-  "beef-chili": ["Ground beef 1 lb","Cooked black beans 1.5 cups","Kidney beans 1 can","Pasta sauce 1 jar"],
-  "ginger-salmon": ["Salmon fillet 1"],
-  "chicken-biryani": ["Chicken leg meat (mom's) 8-10 oz","Basmati rice 1 cup"],
-  "ribeye-chimichurri": ["Ribeye steak 1","Sweet potato half","Asparagus half bunch"],
-  "lentil-soup": ["GF chicken sausage 2 links","Green lentils 1 cup","Kale 2 cups","Diced tomatoes 1 can"],
-  "salmon-salad": ["Canned salmon 1 can","Mixed greens 2 cups","Avocado quarter"],
-  "zaatar-chicken": ["Chicken leg meat (mom's) 6-8 oz","Broccoli 2 cups","Cooked quinoa ¾ cup"],
-  "roasted-thighs": ["Chicken thighs 4","Brussels sprouts 1.5 lb","Sweet potatoes 2"],
-  "chia-pudding": ["Chia seeds 3 tbsp","Berries ½ cup"],
-  "egg-bake": ["Egg bake slice 1"],
-  "gf-overnight-oats": ["GF oats ½ cup","Greek yogurt ½ cup","Berries ½ cup","Walnuts 1 tbsp"],
-  "greek-yogurt-bowl": ["Greek yogurt ¾ cup","Blueberries ½ cup"],
-  "lentil-bread-ab": ["Lentil bread 1 slice","Almond butter 1 tbsp"],
-  "parm-crisps": ["Parm crisps 3","Almonds 15"],
-  "parm-chunk": ["Parm chunk 1 oz","Almonds 15"],
-  "simple-snack": ["Snack rotation"],
-  "return-home-bowl": ["Refried beans 1 can","Cheddar/mozz ¼ cup","Salsa","Rice crackers or rice pouch"],
-  "nurri": ["Nurri Chocolate Milk bottle"],
-  "travel-snacks": ["Travel bag items"]
-};
-
-// localStorage: what's been eaten, skipped, or swapped, by person
-// Format: { "date|type": { t: true/false, k: true/false, skipped: bool, swap: {name, cal, p} } }
-function getEaten() {
-  try { return JSON.parse(localStorage.getItem('mealsEatenV3') || '{}'); } catch(e) { return {}; }
-}
-function saveEaten(obj) { try { localStorage.setItem('mealsEatenV3', JSON.stringify(obj)); } catch(e){} }
-function toggleEatenPerson(mealKey, person) {
-  const eaten = getEaten();
-  if (!eaten[mealKey]) eaten[mealKey] = {t:false, k:false};
-  eaten[mealKey][person] = !eaten[mealKey][person];
-  // clean up if nothing marked
-  if (!eaten[mealKey].t && !eaten[mealKey].k && !eaten[mealKey].skipped && !eaten[mealKey].swap) delete eaten[mealKey];
-  saveEaten(eaten);
-  renderToday();
-}
-function toggleEatenBoth(mealKey) {
-  const eaten = getEaten();
-  const current = eaten[mealKey] || {t:false, k:false};
-  const bothChecked = current.t && current.k;
-  if (bothChecked) {
-    delete current.t; delete current.k;
-    if (!current.skipped && !current.swap) delete eaten[mealKey]; else eaten[mealKey] = current;
-  } else {
-    eaten[mealKey] = {...current, t:true, k:true, skipped:false};
-  }
-  saveEaten(eaten);
-  renderToday();
-}
-function toggleSkip(mealKey) {
-  const eaten = getEaten();
-  const current = eaten[mealKey] || {};
-  if (current.skipped) {
-    delete current.skipped;
-    if (!current.t && !current.k && !current.swap) delete eaten[mealKey]; else eaten[mealKey] = current;
-  } else {
-    eaten[mealKey] = {t:false, k:false, skipped:true};
-  }
-  saveEaten(eaten);
-  renderToday();
-}
-function swapMeal(mealKey) {
-  const newName = prompt('What did you eat instead?', '');
-  if (!newName || !newName.trim()) return;
-  const calStr = prompt('Approximate calories?', '200');
-  const pStr = prompt('Approximate protein (g)?', '15');
-  const eaten = getEaten();
-  const current = eaten[mealKey] || {t:false, k:false};
-  eaten[mealKey] = {...current, swap: {name: newName.trim(), cal: parseInt(calStr)||0, p: parseInt(pStr)||0}, skipped:false};
-  saveEaten(eaten);
-  renderToday();
-}
-function clearSwap(mealKey) {
-  const eaten = getEaten();
-  const current = eaten[mealKey] || {};
-  delete current.swap;
-  if (!current.t && !current.k && !current.skipped) delete eaten[mealKey]; else eaten[mealKey] = current;
-  saveEaten(eaten);
-  renderToday();
-}
-function clearEaten() {
-  if (confirm('Clear all eaten/skipped/swapped marks for today?')) {
-    const today = getTodayISO();
-    const eaten = getEaten();
-    Object.keys(eaten).forEach(k => { if (k.startsWith(today)) delete eaten[k]; });
-    saveEaten(eaten);
-    renderToday();
-  }
-}
-
 // Day-specific prep tasks (what to do TONIGHT for tomorrow, or tomorrow AM)
 const prepAhead = {
-  "2026-08-02": {tonight:[], tomorrowAM:[]},
-  "2026-08-03": {tonight:["🍞 START lentil bread NOW: soak 1 cup red lentils 2-4 hours (need 5 slices this week)","⚠️ Move up beef chili to TUE (using 4-day cooked black beans)","🍗 Verify shredded chicken container in fridge for tomorrow's lunch","🍞 After lentils soaked: blend + bake 40 min at 350°F"], tomorrowAM:["Grab pre-made Chicken Med Bowl jar for lunch","Blend berry protein smoothie 5m in AM","🍞 Slice cooled lentil bread → store in fridge/freezer"]},
-  "2026-08-04": {tonight:["🥩 Batch beef chili tonight (25 min, uses cooked black beans + kidney beans + jarred sauce)","🥩 PULL RIBEYE FROM FREEZER → fridge to thaw for Thu night","🌱 Make chia pudding for Thu breakfast: 3 tbsp chia + 1 cup almond milk + vanilla + cinnamon + 1 tsp maple → fridge"], tomorrowAM:["Grab egg bake square + lentil bread","Pack Wed lunch = Salmon Nicoise mason jar (leftover)"]},
-  "2026-08-05": {tonight:["🐟 LAST FRESH FISH night — ginger salmon (15 min)","🥩 Confirm ribeye thawing for Thu","🍲 Verify Thu lunch soup portioned in fridge"], tomorrowAM:["Grab chia pudding + berries + walnuts","Pack Thu lunch = lentil soup container"]},
-  "2026-08-06": {tonight:["🥩 RIBEYE NIGHT tonight — let rest at room temp 20 min","💧 Extra hydration (ribeye + salt = thirst)","🍲 Verify Fri lunch = chili leftover portion in fridge","🍗 Verify remaining shredded chicken for Fri dinner"], tomorrowAM:["Blend green smoothie","Pack Fri lunch = chili leftover"]},
-  "2026-08-07": {tonight:["🚗 PACK FOR TRIP: cooler + dry bag","🍳 Slice remaining egg bake → grab 1-2 squares for Sat AM breakfast in cooler","🥛 Pre-make smoothie in insulated bottle for Sat AM","🥨 Bag up: apples, almond butter packets, Parm crisps, lentil bread slices, hard-boiled eggs, hummus + veg","Fill water bottles"], tomorrowAM:["🚗 Leave for trip — grab cooler + dry bag","Breakfast en route from cooler"]},
-  "2026-08-08": {tonight:["🚗 On the road! Enjoy dinner out","💧 Hydrate — travel dehydrates fast"], tomorrowAM:["Breakfast from cooler leftovers","Drive home"]},
-  "2026-08-09": {tonight:["📋 Review week — what worked, what didn't → tell Scout","🛒 Plan next week: mostly using freezer proteins (3 ribeyes + 3 lbs ground beef + 23 chicken legs) + pantry"], tomorrowAM:["🎉 Week complete!"]}
+  "2026-08-03": {tonight:["🥩 Pull ribeye from freezer → fridge to thaw (Wed dinner)","🌾 Verify overnight oats jar is in fridge for Sun/Thu","🍗 Verify shredded chicken container in fridge for tomorrow's lunch bowl"], tomorrowAM:["Grab pre-made Chicken Med Bowl jar for lunch (already assembled)","Blend berry protein smoothie 5m in AM"]},
+  "2026-08-04": {tonight:["🥩 Confirm ribeye is thawing (should be soft by Wed AM)","🌱 Make chia pudding for Thu breakfast: 3 tbsp chia + 1 cup almond milk + vanilla + cinnamon + 1 tsp maple in jar → fridge"], tomorrowAM:["Grab egg bake square + lentil bread","Pack Wed lunch = Salmon Nicoise leftover from Mon night salmon"]},
+  "2026-08-05": {tonight:["🥩 Ribeye night! Reduce fridge = give it a few hrs at room temp before searing","🥬 Verify Thu lunch soup portioned in fridge"], tomorrowAM:["Grab chia pudding + berries + walnuts","Pack Thu lunch = Lentil soup container"]},
+  "2026-08-06": {tonight:["🥩 Batch beef chili tonight → 6 portions, freezer 3","🍗 Pull ~10 oz shredded chicken from fridge for tomorrow's biryani"], tomorrowAM:["Blend green smoothie","Pack Fri lunch = Chili leftover"]},
+  "2026-08-07": {tonight:["🍛 Biryani night — mise en place 15 min before starting","🌾 Make Sat egg bake #2 morning if desired, or grab existing squares"], tomorrowAM:["Grab egg bake + berries","Sat lunch = canned salmon salad (fresh assembly, 8 min)"]},
+  "2026-08-08": {tonight:["🍗 Pull chicken thighs from fridge for Sun dinner (season overnight for max flavor)","🌾 Verify last overnight oats jar is set for Sun AM"], tomorrowAM:["Grab overnight oats","Sun lunch = Lentil soup leftover"]},
+  "2026-08-09": {tonight:["📋 Review week — what worked, what didn't → tell Scout","🛒 Plan next week's grocery list from remaining freezer/pantry"], tomorrowAM:["🎉 Week complete!"]}
 };
 
 function renderToday() {
@@ -650,25 +486,6 @@ function renderToday() {
   const totals = allTodayMeals.reduce((a,m) => ({cal:a.cal+m.cal, p:a.p+m.p, fib:a.fib+m.fib}), {cal:0, p:0, fib:0});
   const dateStr = new Date(today+'T12:00:00').toLocaleDateString('en-US',{weekday:'long', month:'long', day:'numeric'});
   const prep = prepAhead[today] || {tonight:[], tomorrowAM:[]};
-  const eaten = getEaten();
-
-  // Compute per-person totals — skipped meals excluded; swaps use swap macros
-  const eatenEntries = allTodayMeals.map(m => ({meal: m, e: eaten[`${m.date}|${m.type}`]})).filter(x => x.e);
-  const activeEntries = eatenEntries.filter(x => !x.e.skipped);
-  const tCount = activeEntries.filter(x => x.e.t).length;
-  const kCount = activeEntries.filter(x => x.e.k).length;
-  const skippedCount = eatenEntries.filter(x => x.e.skipped).length;
-  const macrosFor = (x) => x.e.swap ? {cal: x.e.swap.cal, p: x.e.swap.p} : {cal: x.meal.cal, p: x.meal.p};
-  const tTotals = activeEntries.filter(x => x.e.t).reduce((a,x) => { const m = macrosFor(x); return {cal:a.cal+m.cal, p:a.p+m.p}; }, {cal:0, p:0});
-  const kTotals = activeEntries.filter(x => x.e.k).reduce((a,x) => { const m = macrosFor(x); return {cal:a.cal+m.cal, p:a.p+m.p}; }, {cal:0, p:0});
-  const consumedItems = {};
-  activeEntries.forEach(x => {
-    if (x.e.swap) return; // swaps: unknown inventory, skip auto-decrement
-    const persons = (x.e.t ? 1 : 0) + (x.e.k ? 1 : 0);
-    if (persons === 0) return;
-    const items = mealConsumes[x.meal.recipe] || [];
-    items.forEach(it => { consumedItems[it] = (consumedItems[it] || 0) + persons; });
-  });
 
   // Find tomorrow
   const days = [...new Set(meals.map(m => m.date))].sort();
@@ -684,65 +501,16 @@ function renderToday() {
       <div class="today-totals">Daily target: ${totals.cal} cal · ${totals.p}g protein · ${totals.fib}g fiber</div>
     </div>
 
-    ${eatenEntries.length ? `
-    <div class="progress-summary">
-      <div><strong>👩 Tatiana:</strong> ${tCount}/${allTodayMeals.length} meals · ${tTotals.cal} cal · ${tTotals.p}g P</div>
-      <div style="margin-top:4px;"><strong>👨 Khalid:</strong> ${kCount}/${allTodayMeals.length} meals · ${kTotals.cal} cal · ${kTotals.p}g P</div>
-      ${skippedCount ? `<div style="margin-top:4px; color:var(--cp-text-muted); font-size:13px;">↳ ${skippedCount} meal(s) skipped (excluded from totals)</div>` : ''}
-      <button class="clear-btn" onclick="clearEaten()" style="margin-top:8px;">Clear today</button>
-    </div>` : ''}
-
     <div class="today-section">
-      <h3>🍽️ Eat today <span style="font-weight:400; font-size:13px; color:var(--cp-text-muted);">— T = Tatiana, K = Khalid, Both = both. Use ⏭ Skip or 🔄 Swap if changed.</span></h3>
-      ${todayMeals.map(m => {
-        const key = `${m.date}|${m.type}`;
-        const e = eaten[key] || {t:false, k:false};
-        const anyEaten = e.t || e.k;
-        const both = e.t && e.k;
-        const isSkipped = e.skipped;
-        const hasSwap = !!e.swap;
-        let cls = '';
-        if (isSkipped) cls = 'skipped';
-        else if (hasSwap) cls = 'swapped';
-        else if (anyEaten) cls = 'eaten';
-        return `
-        <div class="today-meal ${cls}">
-          <div class="eaten-check">
-            <div class="eaten-check-row">
-              <input type="checkbox" id="c-t-${key}" ${e.t ? 'checked' : ''} ${isSkipped ? 'disabled' : ''} onchange="toggleEatenPerson('${key}','t')">
-              <label for="c-t-${key}">T</label>
-            </div>
-            <div class="eaten-check-row">
-              <input type="checkbox" id="c-k-${key}" ${e.k ? 'checked' : ''} ${isSkipped ? 'disabled' : ''} onchange="toggleEatenPerson('${key}','k')">
-              <label for="c-k-${key}">K</label>
-            </div>
-            <div class="eaten-check-both">
-              <input type="checkbox" id="c-b-${key}" ${both ? 'checked' : ''} ${isSkipped ? 'disabled' : ''} onchange="toggleEatenBoth('${key}')">
-              <label for="c-b-${key}">Both</label>
-            </div>
-          </div>
-          <div class="today-meal-body">
-            <div onclick="jumpToRecipe('${m.recipe}')" style="cursor:pointer;">
-              <div class="today-meal-type">${m.type}</div>
-              <div class="today-meal-name">${m.name}</div>
-              <div class="today-meal-meta"><span class="time">⏱ ${m.time}</span> · ${m.cal} cal · ${m.p}g protein</div>
-            </div>
-            ${hasSwap ? `<div class="swap-note">🔄 Swapped: <strong>${e.swap.name}</strong> (${e.swap.cal} cal · ${e.swap.p}g P) <button class="action-btn" onclick="clearSwap('${key}')" style="margin-left:8px; padding:1px 6px; font-size:10px;">undo</button></div>` : ''}
-            <div class="meal-actions">
-              <button class="action-btn skip" onclick="toggleSkip('${key}')">${isSkipped ? '↩ Unskip' : '⏭ Skip'}</button>
-              <button class="action-btn swap" onclick="swapMeal('${key}')">🔄 ${hasSwap ? 'Edit swap' : 'Swap'}</button>
-            </div>
-          </div>
-        </div>`;
-      }).join('')}
+      <h3>🍽️ Eat today</h3>
+      ${todayMeals.map(m => `
+        <div class="today-meal" onclick="jumpToRecipe('${m.recipe}')">
+          <div class="today-meal-type">${m.type}</div>
+          <div class="today-meal-name">${m.name}</div>
+          <div class="today-meal-meta"><span class="time">⏱ ${m.time}</span> · ${m.cal} cal · ${m.p}g protein</div>
+        </div>
+      `).join('')}
     </div>
-
-    ${Object.keys(consumedItems).length ? `
-    <div class="inventory-log">
-      <h3>📦 Auto-deducted from inventory today</h3>
-      <div style="font-size:13px; color:var(--cp-text-muted); margin-bottom:8px;">Multiplier = # of people who ate the meal. Tell Scout to sync to pantry file when ready.</div>
-      ${Object.entries(consumedItems).map(([it, count]) => `<div class="inventory-item"><span>${it}</span><span class="inventory-decrement">× ${count}</span></div>`).join('')}
-    </div>` : ''}
 
     ${prep.tonight.length ? `
     <div class="today-section">
@@ -758,20 +526,16 @@ function renderToday() {
       ${prep.tomorrowAM.length ? `<div class="prep-callout"><div class="prep-callout-title">Morning grab-and-go</div><ul>${prep.tomorrowAM.map(t => `<li>${t}</li>`).join('')}</ul></div>` : ''}
       <div style="margin-top:12px;">
         ${tomorrowMeals.map(m => `
-          <div class="today-meal" style="opacity:.85;">
-            <div class="today-meal-body" onclick="jumpToRecipe('${m.recipe}')">
-              <div class="today-meal-type">${m.type}</div>
-              <div class="today-meal-name">${m.name}</div>
-              <div class="today-meal-meta"><span class="time">⏱ ${m.time}</span> · ${m.cal} cal · ${m.p}g P</div>
-            </div>
+          <div class="today-meal" onclick="jumpToRecipe('${m.recipe}')" style="opacity:.85;">
+            <div class="today-meal-type">${m.type}</div>
+            <div class="today-meal-name">${m.name}</div>
+            <div class="today-meal-meta"><span class="time">⏱ ${m.time}</span> · ${m.cal} cal · ${m.p}g P</div>
           </div>
         `).join('')}
       </div>
     </div>` : ''}
   `;
 }
-
-renderToday();
 </script>
 </body>
 </html>
